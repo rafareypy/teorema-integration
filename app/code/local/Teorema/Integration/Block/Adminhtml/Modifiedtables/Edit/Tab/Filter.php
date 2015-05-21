@@ -1,0 +1,11 @@
+<?php
+class PontoCommerce_AttributeRelation_Block_Adminhtml_AttributeRelation_Edit_Tab_Filter extends Mage_Adminhtml_Block_Widget_Form
+{
+	protected function _prepareForm()
+    {
+        $form = new Varien_Data_Form();
+        $this->setForm($form);
+
+        return parent::_prepareForm();
+    }
+}

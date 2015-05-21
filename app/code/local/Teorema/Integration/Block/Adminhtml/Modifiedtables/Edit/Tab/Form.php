@@ -1,0 +1,16 @@
+<?php
+class PontoCommerce_AttributeRelation_Block_Adminhtml_AttributeRelation_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
+	protected function _prepareForm()
+    {
+        $form = new Varien_Data_Form();
+
+        $this->setForm($form);
+
+        $fieldset = $form->addFieldset('teorema_integration_form', array('legend'=> 'Informações gerais'));
+
+
+
+        return parent::_prepareForm();
+    }
+}

@@ -1,0 +1,5 @@
+app/code/local/Teorema										app/code/local/Teorema
+app/etc/modules/Teorema_Integration.xml  						app/etc/modules/Teorema_Integration.xml
+app/design/adminhtml/default/default/layout/teorema/teorema_integration.xml		app/design/adminhtml/default/default/layout/teorema/teorema_integration.xml
+
+

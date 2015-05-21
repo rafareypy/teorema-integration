@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <report>
+            <children>
+                <integration>
+                    <title>Integração Teorema </title>
+                    <sort_order>600</sort_order>
+                    <action>teorema_integration/adminhtml_integration</action>
+                </integration>
+            </children>
+        </report>
+    </menu>
+</config>
