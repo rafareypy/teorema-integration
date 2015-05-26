@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Teorema_Util>
+      <version>0.0.1</version>
+    </Teorema_Util>
+  </modules>
+  <global>
+    <helpers>
+      <Teorema_Util>
+        <class>Teorema_Util_Helper</class>
+      </Teorema_Util>
+    </helpers>
+    <frontend>
+      <routers>
+        <Teorema_Util>
+          <use>standard</use>
+          <args>
+            <module>Teorema_Util</module>
+            <frontName>utils</frontName>
+          </args>
+        </Teorema_Util>
+      </routers>
+    </frontend>
+  </global>
+</config>

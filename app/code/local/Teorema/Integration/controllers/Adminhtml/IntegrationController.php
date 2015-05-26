@@ -21,17 +21,172 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
+    /*
+      Testes relacionados a clientes
+    */
     public function newAction() {
 
+      //echo "buscando clientes";
+
+      $service = Mage::getModel('teorema_integration/service_customer');
+
+      #var_dump($service->getAllCustomersToTeorema());
+      #die();
+
+      echo "<br/>Creating Customer<br/>";
+
+
+
+      #Pendencias:
+      #Criar bairro para o cliente
+      #Verificar MUNICIPIOCODIGOIBGE
+      #Verificar street_number para o endereço
+
+
+      $collection = Mage::getModel('customer/customer')->getCollection()
+        ->addAttributeToSelect('firstname')
+        ->addAttributeToSelect('lastname')
+        ->addAttributeToSelect('taxvat')
+        ->addAttributeToSelect('email');
+
+
+        $result = "" ;
+
+        foreach ($collection as $customer)
+        {
+
+            if($customer->getId() == 143){
+                $result = $service->createCustomerToTeorema($customer) ;
+            }
+
+        }
+
+        if(isset($result->CODIGO)){
+          if($result->CODIGO == 0){
+            echo "<br/>Customer " . $result->FIELDS->CLIFORNOME . " saved " ;
+          }else{
+            echo "error in save customer <br/> " . $result->ERRO;
+          }
+        }else{
+          echo "<br/>error in Saving customer <br/>" ;
+        }
+
+    }
+
+    public function newActionProduct() {
+
+      //$this->testCategories();
+
+      //test ok
       $service = Mage::getModel('teorema_integration/service_product');
 
-      $test =  $service->getProductsToTeorema();
+      //$test = $service->getAllGroupedProductToTeorema();
+
+      //var_dump($service->getAllProductsToTeorema());
+      //var_dump( json_encode($service->getProductJsonToTeorema('006747')) );
+
+
+      //$test =  $service->testError();
+
+      //test ok
+      //$test = $service->getProduct('006747');
+
+
+      //die("Creating products");
+      //test
+      $test = $service->updateAllProductsTeoremaToMagento();
+
+
+
+      //$test = $service->getAllProductsToTeorema();
+
+
+
+      //$service = Mage::getModel('teorema_integration/service_balance');
+
+      //test ok..
+      //Verifica o estoque do produto
+      //$test = $service->availableBalance('000004');
+
+      //Reserva o estoque do produto
+      //$test = $service->reservedBalanceToProduct('000004');
+
+
+
+      //$service = Mage::getModel('teorema_integration/service_customer');
+
+      //$test =  $service->getAllCustomersToTeorema("0001");
+
 
       var_dump($test);
       die();
 
         $this->_forward('edit');
     }
+
+
+
+
+
+    public function testCategories(){
+
+      echo "Testing categories";
+
+      $serviceProduct = Mage::getModel('teorema_integration/service_product');
+
+      $listProducts = $serviceProduct->getAllProductsToTeorema();
+
+
+
+      $cont = 8 ;
+
+      foreach ($listProducts as $key => $p) {
+
+        if($cont == 11){
+          echo "<br/>sku = " . $p->ITEMREDUZIDO ;
+          //Metodo que ira verificar se o produto existe, se não existir cria o produto..
+
+          $productJson =  $serviceProduct->getProductJsonToTeorema($p->ITEMREDUZIDO); //6745
+
+
+          echo "<br/> ITEMDESCRICAO2 : " . $productJson->ITEMDESCRICAO2;
+          echo "<br/> FAMILIA : " . $productJson->FAMILIA;
+          echo "<br/> Grupo : " . $productJson->GRUPO;
+          echo "<br/> SUBGRUPO : " . $productJson->SUBGRUPO;
+
+          var_dump($productJson);
+
+
+        }
+
+        $cont++ ;
+
+      }
+
+
+
+      $service = Mage::getModel('teorema_integration/service_category');
+
+      $parentId = 2;
+      $name = 'controller1';
+      $urlKey = $name . "-url" ;
+
+      $service->createCategory($parentId , $name , $urlKey  );
+
+
+      die();
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     public function saveAction() {
 
