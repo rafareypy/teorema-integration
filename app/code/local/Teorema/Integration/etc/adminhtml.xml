@@ -1,14 +1,59 @@
 <?xml version="1.0"?>
 <config>
     <menu>
-        <report>
+        <teorema_integration module="teorema_integration">
+            <title>Integração Teorema</title>
+            <sort_order>100</sort_order>
             <children>
+                <tabela>
+                    <title>Verificar Tabelas Modificadas</title>
+                    <sort_order>10</sort_order>
+                    <action>teorema_integration/adminhtml_modifiedtables</action>
+                </tabela>
+                <tabelacolor>
+                    <title>Verificar produtos Atualizados</title>
+                    <sort_order>20</sort_order>
+                    <action>teorema_integration/adminhtml_modifiedtables</action>
+                </tabelacolor>
                 <integration>
-                    <title>Integração Teorema </title>
-                    <sort_order>600</sort_order>
+                    <title>Integração Teorema</title>
+                    <sort_order>30</sort_order>
                     <action>teorema_integration/adminhtml_integration</action>
                 </integration>
             </children>
-        </report>
+        </teorema_integration>
     </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <teorema_integration>
+                      <title>Teorema Integração</title>
+                      <sort_order>200</sort_order>
+                    </teorema_integration>
+                    <system>
+                      <children>
+                        <config>
+                          <children>
+                            <teorema>
+                              <title>Integração</title>
+                            </teorema>
+                          </children>
+                        </config>
+                      </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <layout>
+        <updates>
+            <teorema_integration>
+                <file>teorema/teorema_integration.xml</file>
+            </teorema_integration>
+        </updates>
+    </layout>
 </config>

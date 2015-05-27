@@ -4,7 +4,7 @@ class Teorema_Integration_Adminhtml_ModifiedtablesController extends Mage_Adminh
 	protected function _initAction()
     {
         $this->loadLayout()
-            ->_setActiveMenu('catalog/teorema_integration')
+            ->_setActiveMenu('teorema_integration/items')
             ->_addBreadcrumb('Gerenciar Integração Teorema', 'Integração Teorema');
         return $this;
     }
@@ -12,6 +12,9 @@ class Teorema_Integration_Adminhtml_ModifiedtablesController extends Mage_Adminh
     public function indexAction()
     {
         $this->_initAction();
+				//print_r(get_class_methods(get_class($this->getLayout()->getUpdate())));
+				//var_dump($this->getLayout()->getUpdate()->asSimplexml());
+				//$this->_addContent($this->getLayout()->createBlock('teorema_integration/adminhtml_modifiedtables'));
         $this->renderLayout();
     }
 

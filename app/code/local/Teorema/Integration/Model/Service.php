@@ -21,34 +21,17 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
    */
   function __construct()
   {
-
       $this->soapVersion = SOAP_1_1;
-
       $date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
-
-      $this->active 		= Mage::getStoreConfig("catalog/pcomsoftvar/active");
-
+      $this->active 		= Mage::getStoreConfig("teorema/teorema_integration/active");
       $this->date 		  = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
-      $this->user 		  = Mage::getStoreConfig("catalog/teorema_integration/user");
+      $this->user 		  = Mage::getStoreConfig("teorema/teorema_integration/user");
       $this->password   = $date->format("Y-m-d").'T'.$date->format("H:i:s").'GMT-03:00HOV+01:00';
-      $this->password_config = Mage::getStoreConfig("catalog/teorema_integration/password");
+      $this->password_config = Mage::getStoreConfig("teorema/teorema_integration/password");
       $this->password_md5   = md5($this->password.strtoupper($this->password_config));
-      $this->soap_url_wsdl  = Mage::getStoreConfig("catalog/teorema_integration/soap_url_wsdl");
-      $this->$soap_domain   = Mage::getStoreConfig("catalog/teorema_integration/soap_domain");
-      $this->soap_port      = Mage::getStoreConfig("catalog/teorema_integration/soap_port");
-
-
-      //echo "<br/>...............<br/>";
-      //echo "<br/>  Date : " . $this->date ;
-      //echo "<br/>  Password : " . $this->password ;
-      //echo "<br/>  User : " . $this->user ;
-      //echo "<br/>  password_conig : " . $this->password_conig ;
-      //echo "<br/>  password_md5 : " . $this->password_md5 ;
-      //echo "<br/>  soap_url_wsdl : " . $this->soap_url_wsdl ;
-      //echo "<br/>  soap_domain : " . $this->soap_domain ;
-      //echo "<br/>  soap_port : " . $this->soap_port ;
-      //echo "<br/>...............<br/>";
-
+      $this->soap_url_wsdl  = Mage::getStoreConfig("teorema/teorema_integration/soap_url_wsdl");
+      $this->soap_domain   = Mage::getStoreConfig("teorema/teorema_integration/soap_domain");
+      $this->soap_port      = Mage::getStoreConfig("teorema/teorema_integration/soap_port");
   }
 
 
@@ -121,109 +104,86 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
 
 
-public function testError(){
+  public function testError(){
+    $date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
+  	$user = 'ECOMMERCE';
+  	$password = $date->format("Y-m-d").'T'.$date->format("H:i:s").'GMT-03:00HOV+01:00';
+  	$password_md5 = md5($password.strtoupper('eco3102'));
+  	$soap_url_wsdl = "http://192.168.0.43:5539/send?wsdl";
+  	$soap_domain = 'http://192.168.0.43';
+  	$soap_port = '5539';
+  	$tabelasAlteradas = 'ecomTabelasAlteradas';
+  	try {
+  			$soapClient = new SoapClient($soap_url_wsdl,array('cache_wsdl' => WSDL_CACHE_NONE, 'encoding' => 'UTF-8','soap_version' => $soapVersion));
+        echo "<br/>connected in the service.!";
+  			$p = array(
+  				 'USUARIO' 	=> $user,
+  				 'METODO' 	=> 'ecomItemTodosConsulta',
+  				 'SENHA' 	=> $password_md5,
+  				 'SISTEMA' 	=> 'ecommerce',
+  				 'EMPRESACODIGO' 	=> '0001',
+  				 'SENHA_REF' => $password
+  			 );
+  			  // $p = array(
+  				// 'USUARIO' 	=> $user,
+  				// 'METODO' 	=> 'ecomTabelasAlteradas',
+  				// 'SENHA' 	=> $password_md5,
+  				// 'SISTEMA' 	=> 'ecommerce',
+  				// 'SENHA_REF' => $password
+  			  // );
 
+  			  //Consulta usuarios..
+  			  // $p = array(
+  				// 'USUARIO' 	=> $user,
+  				// 'METODO' 	=> 'ecomConsultaUsuarios',
+  				// 'SENHA' 	=> $password_md5,
+  				// 'SISTEMA' 	=> 'ecommerce',
+  				// 'SENHA_REF' => $password
+  			  // );
 
-  $date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
-	$user = 'ECOMMERCE';
-	$password = $date->format("Y-m-d").'T'.$date->format("H:i:s").'GMT-03:00HOV+01:00';
-	$password_md5 = md5($password.strtoupper('eco3102'));
+  			  //Para testar se as configurações estão ok..
+  			  //$p = array(
+          //'metodo' 	=> 'teste',
+          // 'mensagem' 	=> 'testeMs'
+          //);
+          //$p = array(
+          //  'USUARIO'   => $this->user,
+          //  'METODO'    => 'ecomItemConsulta',
+          //  'SENHA_REF' => $this->password,
+          //  'SENHA'     => $this->password_md5,
+          //  'EMPRESACODIGO' => '0001',
+          //  'ITEMREDUZIDO' => '000001'
+          //);
+          $parameters = json_encode($p);
+  			  $response = $soapClient->send(array( 'arg0' => $parameters));
+  			  $arrayResult = json_decode($response->return) ;
+  			  //var_dump($arrayResult) ;
+  			  foreach ($arrayResult as $key => $users) {
+  					   echo "result <br/>---------<br/>";
+  					   var_dump($users);
+  				     echo "result <br/>---------<br/>";
+  			   }
 
+      	}catch (Exception $e) {
+      			echo "<br/>error when trying to access service.!<br/>";
+      			echo "Error<br/>";
+      			var_dump($e);
 
-	$soap_url_wsdl = "http://192.168.0.43:5539/send?wsdl";
-	$soap_domain = 'http://192.168.0.43';
-	$soap_port = '5539';
+      	}
+      die();
+    }
 
-
-	$tabelasAlteradas = 'ecomTabelasAlteradas';
-
-
-
-		try {
-			$soapClient = new SoapClient(
-						$soap_url_wsdl,
-						array('cache_wsdl' => WSDL_CACHE_NONE, 'encoding' => 'UTF-8','soap_version' => $soapVersion));
-
-			echo "<br/>connected in the service.!";
-
-
-			 $p = array(
-				 'USUARIO' 	=> $user,
-				 'METODO' 	=> 'ecomItemTodosConsulta',
-				 'SENHA' 	=> $password_md5,
-				 'SISTEMA' 	=> 'ecommerce',
-				 'EMPRESACODIGO' 	=> '0001',
-				 'SENHA_REF' => $password
-			 );
-//
-			// $p = array(
-				// 'USUARIO' 	=> $user,
-				// 'METODO' 	=> 'ecomTabelasAlteradas',
-				// 'SENHA' 	=> $password_md5,
-				// 'SISTEMA' 	=> 'ecommerce',
-				// 'SENHA_REF' => $password
-			// );
-
-
-			//Consulta usuarios..
-			// $p = array(
-				// 'USUARIO' 	=> $user,
-				// 'METODO' 	=> 'ecomConsultaUsuarios',
-				// 'SENHA' 	=> $password_md5,
-				// 'SISTEMA' 	=> 'ecommerce',
-				// 'SENHA_REF' => $password
-			// );
-
-
-
-				//Para testar se as configurações estão ok..
-			 //$p = array(
-       //'metodo' 	=> 'teste',
-       // 'mensagem' 	=> 'testeMs'
-       //);
-
-
-              //$p = array(
-              //  'USUARIO'   => $this->user,
-              //  'METODO'    => 'ecomItemConsulta',
-              //  'SENHA_REF' => $this->password,
-              //  'SENHA'     => $this->password_md5,
-              //  'EMPRESACODIGO' => '0001',
-              //  'ITEMREDUZIDO' => '000001'
-              //);
-
-
-			$parameters = json_encode($p);
-//
-			$response = $soapClient->send(array( 'arg0' => $parameters));
-
-
-			$arrayResult = json_decode($response->return) ;
-
-			//var_dump($arrayResult) ;
-
-			 foreach ($arrayResult as $key => $users) {
-
-					echo "result <br/>---------<br/>";
-					var_dump($users);
-					echo "result <br/>---------<br/>";
-
-			 }
-
-
-
-		} catch (Exception $e) {
-
-				echo "<br/>error when trying to access service.!<br/>";
-				echo "Error<br/>";
-				var_dump($e);
-
-		}
-
-    die();
-
-
-}
+    public function getInfo(){
+      return array('date' => $this->date,
+                   'password' => $this->password,
+                   'user' => $this->user,
+                   'password_config' => $this->password_config,
+                   'password_md5' => $this->password_md5,
+                   'soap_url_wsdl' => $this->soap_url_wsdl,
+                   'soap_domain' => $this->soap_domain,
+                   'soap_port' => $this->soap_port
+            );
+    }
 
 
 
