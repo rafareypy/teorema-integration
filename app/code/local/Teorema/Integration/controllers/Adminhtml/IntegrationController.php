@@ -21,15 +21,48 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
+
+
+    /*Testes order*/
+    public function newActionOrder() {
+
+      die("Enviando pedidos");
+
+      $orders = Mage::getModel('sales/order')->getCollection();
+
+      $service = Mage::getModel('teorema_integration/service_order');
+
+      foreach ($orders as $key => $order)
+      {
+
+        #este pedido foi realizado por um cliente e com produtos importados do webservice teorema
+        if($order->getIncrementId() == 145000008){
+          //echo "<br/> Values to Order : " . $order->getIncrementId();
+          $service->sendOrderMagentoToTeorema($order);
+        }
+
+
+
+      }
+
+      die();
+    }
+
     /*
       Testes relacionados a clientes
     */
-    public function newAction() {
+    public function newActionCustomer() {
 
       //echo "buscando clientes";
+
       $service = Mage::getModel('teorema_integration/service_customer');
-      //var_dump($service->getInfo());
+
+      var_dump($service->getAllCustomersToTeorema());
+      die();
+
       echo "<br/>Creating Customer<br/>";
+
+
 
       #Pendencias:
       #Criar bairro para o cliente
@@ -50,7 +83,9 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
         {
 
             if($customer->getId() == 143){
-                $result = $service->createCustomerToTeorema($customer) ;
+              var_dump($customer);
+              die();
+                //$result = $service->createCustomerToTeorema($customer) ;
             }
 
         }
@@ -67,7 +102,9 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
-    public function newActionProduct() {
+    public function newAction() {
+
+      echo "testing products all products to teorema <br/> ";
 
       //$this->testCategories();
 
