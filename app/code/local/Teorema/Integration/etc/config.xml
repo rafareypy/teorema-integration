@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Teorema_Integration>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Teorema_Integration>
     </modules>
     <global>
@@ -22,6 +22,9 @@
                     <teorema_integration>
                         <table>teorema_integration</table>
                     </teorema_integration>
+                    <teorema_integration_tableschanged>
+                        <table>teorema_integration_tables_changed</table>
+                    </teorema_integration_tableschanged>
                 </entities>
             </teorema_integration_mysql4>
         </models>

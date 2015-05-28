@@ -102,14 +102,42 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
-    public function newAction() {
+    /*Testes relacionados ao tabelas alteradas*/
+    public function newAction(){
+      //die("testing update stock");
 
-      echo "testing products all products to teorema <br/> ";
+      $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
+
+
+
+      $tableschangedTeoremaService->updateTablesChangedTeorema();
+
+
+      die();
+
+      $tables_changed = Mage::getModel('teorema_integration/tableschanged');
+
+      try{
+        $tables_changed->setLastIdUpdated(1);
+
+        //$tables_changed->save();
+
+      }catch(Exception $e){
+        echo "<br/> Erro ao tentar inserir valor em tabelas alteradas ";
+      }
+
+      var_dump( get_class_methods($tables_changed) );
+
+
+    }
+
+    public function newActionProduct() {
+
 
       //$this->testCategories();
 
       //test ok
-      $service = Mage::getModel('teorema_integration/service_product');
+      //$service = Mage::getModel('teorema_integration/service_product');
 
       //$test = $service->getAllGroupedProductToTeorema();
 
@@ -125,7 +153,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       //die("Creating products");
       //test
-      $test = $service->updateAllProductsTeoremaToMagento();
+      //$test = $service->updateAllProductsTeoremaToMagento();
 
 
 

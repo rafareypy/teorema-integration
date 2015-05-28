@@ -92,13 +92,50 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
   }
 
-  public function connectionPost($params = null){
+  public function connectionPost($arrayParams = null){
 
-    $params = json_encode($params);
-		$client = $this->getClient();
-		$response = $client->send(array( 'arg0' => $params));
-		$result = json_decode($response->return);
-		return $result;
+    $result = array('code' => 'error', 'message' => "error" );
+
+
+        try {
+          $soapClient = new SoapClient(
+                $this->soap_url_wsdl,
+                array('cache_wsdl' => WSDL_CACHE_NONE, 'encoding' => 'UTF-8','soap_version' => $this->soapVersion));
+
+
+          /*TODO Verificar se os parametros passados estão corretos*/
+          $arrayParams['SENHA'] = $this->password_md5;
+
+          $parameters = json_encode($arrayParams);
+
+          $response = $soapClient->send(array( 'arg0' => $parameters));
+
+
+          $result = json_decode($response->return) ;
+
+
+         } catch (Exception $e) {
+
+           /*TODO refatorar*/
+             echo "<br/>error when trying to access service.!<br/>";
+             echo "Error<br/>";
+
+             var_dump($e);
+
+             $result['message'] = $e->getMessage();
+             Mage::log($e->getMessage(), null, 'teorema_integration.log')     ;
+
+         }
+
+
+
+         /*TODO verificar retorno, quando der problemas ao fazer uma busca..*/
+
+         if(isset($result->RESULT)){
+              return $result->RESULT ;
+         }else{
+              return $result ;
+         }
 
   }
 
