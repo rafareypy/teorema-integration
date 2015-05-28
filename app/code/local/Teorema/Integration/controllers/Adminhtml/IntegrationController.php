@@ -27,15 +27,9 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     public function newAction() {
 
       //echo "buscando clientes";
-
       $service = Mage::getModel('teorema_integration/service_customer');
-
-      #var_dump($service->getAllCustomersToTeorema());
-      #die();
-
+      //var_dump($service->getInfo());
       echo "<br/>Creating Customer<br/>";
-
-
 
       #Pendencias:
       #Criar bairro para o cliente
