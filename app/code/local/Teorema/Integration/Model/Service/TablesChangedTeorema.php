@@ -27,21 +27,38 @@ class Teorema_Integration_Model_Service_TablesChangedTeorema extends Teorema_Int
 
   }
 
+  /*
+    Função  que sincroniza tabelas modificadas do Web service teorema
+    com o Magento..
+  */
   public function updateTablesChangedTeorema(){
 
-          $tablesMagentochanged = Mage::getResourceModel('teorema_integration/tableschanged_collection')
+    $limit = Mage::getStoreConfig("teorema/teorema_integration/indexer_limit");
+    if(is_null($limit))
+       $limit = 80 ;
+
+
+    $tablesMagentochanged = Mage::getResourceModel('teorema_integration/tableschanged_collection')
                                   ->setOrder('id', 'desc')
-                                  ->setPageSize(1);
+                                  ->setPageSize($limit);
 
-        $table = $tablesMagentochanged->getFirstItem();
+    $table = $tablesMagentochanged->getFirstItem();
 
+    $limitWebservice = Mage::getStoreConfig("teorema/teorema_integration/cron_limit_search_webservice");
 
-    $tablesTeoremaChangedList = $this->getTablesChanged($table->getLastIdUpdated(), 2, null);
+    if(is_null($limitWebservice))
+    $limitWebservice = 50 ;
+
+    #Buscando tabelas alteradas
+    $tablesTeoremaChangedList = $this->getTablesChanged($table->getLastIdUpdated(), $limitWebservice, null);
+
 
     foreach ($tablesTeoremaChangedList as $key => $table)
     {
 
-        $type = 'product';
+        $type = 'other';
+
+        $id_value = "000" ;
 
         $tableschanged = Mage::getModel('teorema_integration/tableschanged');
 
@@ -50,16 +67,51 @@ class Teorema_Integration_Model_Service_TablesChangedTeorema extends Teorema_Int
 
         switch ($table->TABELA)
         {
+
+          #verificar quais adicionar
+
           case "ItemEstoque":
               $type = 'stock' ;
+              $id_value = $table->ITEMREDUZIDO;
+              echo "<br/>Item reduzido<br/>";
+              echo $table->ITEMREDUZIDO ;
             break;
           case "ClienteFornecedor":
               $type = 'customer';
+              $id_value = $table->CLIFORCODIGO;
             break;
+
+          case "Item":
+            $type = 'product';
+            $id_value = $table->ITEMREDUZIDO;
+          break;
+
+
+          case "ItemPlanoPrecoMovimento":
+            $type = 'item_plan_price_movement';
+            $id_value = $table->PLANOPRECOSEQUENCIA;
+          break;
+
+          case "CondicaoPagamento":
+            $type = 'payment_condition';
+            $id_value = $table->CONDICAOCODIGO;
+          break;
+
+          case "Empresa":
+            $type = 'business';
+            $id_value = $table->EMPRESACODIGO;
+          break;
+
+          case "Marca":
+            $type = 'mark';
+            $id_value = $table->MARCACODIGO;
+          break;
+
         }
 
         $tableschanged->setDate(new Date());
         $tableschanged->setType($type);
+        $tableschanged->setIdValue($id_value);
 
         echo "<br/>" .  $tableschanged->getType() . "<br/>";
 

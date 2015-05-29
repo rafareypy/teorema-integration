@@ -214,6 +214,7 @@ public function updateAllStockProducts(){
     $productMagento->setCategoryIds($category);
 
 
+    /*TODO verificar */
     $qty = 0;
     $availableBalance = Mage::getModel('teorema_integration/service_balance')
                                   ->availableBalance($productJson->ITEMREDUZIDO);

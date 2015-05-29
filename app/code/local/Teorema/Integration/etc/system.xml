@@ -79,6 +79,61 @@
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </password>
+
+                      <businesscode translate="label">
+                          <label>EMPRESACODIGO</label>
+                          <comment>Ex.:0001 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>80</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </businesscode>
+
+                      <cron_limit_search_webservice translate="label">
+                          <label>Limite de consultas ao WebService 'atualizar estoque'</label>
+                          <comment>Ex.:50 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>90</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </cron_limit_search_webservice>
+
+
+                      <cron_time translate="label">
+                          <label>Intervalo tempo em minutos para execução cron (tarefas)</label>
+                          <comment>Ex.:30 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>90</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </cron_time>
+
+
+                      <indexer_limit translate="label">
+                          <label>Quantidade limite para soncronização INTERNA estoque</label>
+                          <comment>Ex.:80 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>110</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </indexer_limit>
+
+
+                      <limit_attempts translate="label">
+                          <label>Quantidade limite para tentativas de atualização Tabelas Alteradas</label>
+                          <comment>Ex.:3 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>120</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </limit_attempts>
+
+
                   </fields>
               </teorema_integration>
           </groups>

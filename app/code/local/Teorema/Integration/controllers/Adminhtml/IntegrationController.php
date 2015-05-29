@@ -106,9 +106,15 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     public function newAction(){
       //die("testing update stock");
 
+
+
+       //$service_stock = Mage::getModel('teorema_integration/service_stock');
+
+      //$service_stock->updateStock();
+
+      //die("--------------");
+
       $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
-
-
 
       $tableschangedTeoremaService->updateTablesChangedTeorema();
 

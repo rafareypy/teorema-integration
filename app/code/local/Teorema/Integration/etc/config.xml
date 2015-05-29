@@ -40,6 +40,13 @@
                 </setup>
             </teorema_integration_setup>
         </resources>
+        <index>
+        		<indexer>
+            			<teorema_integration>
+                				<model>teorema_integration/indexer</model>
+            			</teorema_integration>
+        		</indexer>
+    		</index>
     </global>
     <frontend>
         <routers>

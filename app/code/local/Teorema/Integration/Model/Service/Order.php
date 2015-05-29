@@ -102,6 +102,7 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
 
 
 
+
       //campos que não esta no manual, porem são campos no modelo   br.inf.teorema.pitagoras.business.model.entity.VendaMasterBasic:
 
 
