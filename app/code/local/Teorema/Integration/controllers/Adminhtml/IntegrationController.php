@@ -26,7 +26,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     /*Testes order*/
     public function newActionOrder() {
 
-      die("Enviando pedidos");
+      //die("Enviando pedidos");
 
       $orders = Mage::getModel('sales/order')->getCollection();
 
@@ -37,7 +37,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
         #este pedido foi realizado por um cliente e com produtos importados do webservice teorema
         if($order->getIncrementId() == 145000008){
-          //echo "<br/> Values to Order : " . $order->getIncrementId();
+          echo "<br/> Values to Order : " . $order->getIncrementId();
           $service->sendOrderMagentoToTeorema($order);
         }
 
@@ -57,12 +57,10 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       $service = Mage::getModel('teorema_integration/service_customer');
 
-      var_dump($service->getAllCustomersToTeorema());
-      die();
+      //var_dump($service->getAllCustomersToTeorema());
+      //die();
 
       echo "<br/>Creating Customer<br/>";
-
-
 
       #Pendencias:
       #Criar bairro para o cliente
@@ -82,31 +80,57 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
         foreach ($collection as $customer)
         {
 
-            if($customer->getId() == 143){
-              var_dump($customer);
-              die();
-                //$result = $service->createCustomerToTeorema($customer) ;
+            if($customer->getId() == 147){
+                $result = $service->createCustomerToTeorema($customer) ;
+
+
+                if(isset($result->CODIGO)){
+                  if($result->CODIGO == 0){
+                    echo "<br/>Customer " . $result->FIELDS->CLIFORNOME . " saved " ;
+
+                      try{
+                        //include code teorema in customer Magento
+
+                      }catch(Exception $e){
+                        echo "error in save customer to Magento <br/> " . $e->getMessage();
+                      }
+
+                  }else{
+                    echo "error in save customer <br/> " . $result->ERRO;
+                  }
+                }else{
+                  echo "<br/>error in Saving customer <br/>" ;
+                }
+
+
             }
 
         }
 
-        if(isset($result->CODIGO)){
-          if($result->CODIGO == 0){
-            echo "<br/>Customer " . $result->FIELDS->CLIFORNOME . " saved " ;
-          }else{
-            echo "error in save customer <br/> " . $result->ERRO;
-          }
-        }else{
-          echo "<br/>error in Saving customer <br/>" ;
-        }
+
+
+
+ /*
+        echo "<br/><br/><br/>";
+        var_dump($result->FIELDS->CLIFORCODIGO);
+
+        echo "<br/><br/>";
+
+        var_dump($result->CODIGO);
+        echo "<br/><br/><br/><br/><br/>";
+
+        var_dump($result->CLIFORCODIGO);
+
+        echo "<br/><br/><br/><br/>";
+*/
+        var_dump($result);
+        die();
 
     }
 
     /*Testes relacionados ao tabelas alteradas*/
     public function newAction(){
       //die("testing update stock");
-
-
 
        //$service_stock = Mage::getModel('teorema_integration/service_stock');
 

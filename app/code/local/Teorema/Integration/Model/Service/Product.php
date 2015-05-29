@@ -100,30 +100,24 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
   public function createProductMagento($sku)
   {
-
     #Verifica se o produto existe
-    $product_exists = Mage::getModel('catalog/product')
+    $product = Mage::getModel('catalog/product')
                         ->loadByAttribute('sku', $sku);
 
-
-    if($product_exists){
+    if($product){
       echo "<br> Product  existis $sku <br/> ------";
     }else{
-      echo "<br/>Creating product<br/>";
-
+        echo "<br/>Creating product<br/>";
         #Se o produto não existe, então sera buscado o Json do mesmo no webService da Teorema..
         $productTeorema = $this->getProductJsonToTeorema($sku);
 
         #Obtendo um novo produto Magento
-        $productMagentoNew     = $this->getNewProductMagentoToJson($productTeorema);
+        $product     = $this->getNewProductMagentoToJson($productTeorema);
 
-        //006733
-        // ["ITEMDESCRICAO2"]=> string(31) "CAJON SPANDER S003 LUXO NATURAL"
         try {
-
-          $productMagentoNew->save();
-          Mage::log("Produto " . $productMagentoNew->getSku() . " criado com sucesso. ", null, 'teorema_insert.log');
-          echo "<br/>Produto " . $productMagentoNew->getSku() . " criado com sucesso. ";
+          $product->save();
+          Mage::log("Produto " . $product->getSku() . " criado com sucesso. ", null, 'teorema_insert.log');
+          echo "<br/>Produto " . $product->getSku() . " criado com sucesso. ";
         } catch (Exception $e) {
           //Mage::log($e->getMessage());
           echo "<br/>Error in save Product <br/>";
@@ -133,7 +127,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
     }
 
-
+    return $product ;
   }
 
 

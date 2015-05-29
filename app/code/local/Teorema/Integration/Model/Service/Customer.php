@@ -6,8 +6,6 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
       parent::__construct();
   }
 
-
-
   /*Retorna todos os clientes desde o Web Service Teorema*/
   public function getCustomerToTeorema($code = null){
 
@@ -18,7 +16,7 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
     			'CLIFORCODIGO' => $code,
     			'SENHA_REF'  => $this->password,
     			'SENHA'      => "" ,
-    			'EMPRESACODIGO' => $code,
+    			'EMPRESACODIGO' => $this->business_number,
     		);
 
     $result = $this->connectionGet($param);
@@ -33,7 +31,7 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
     			'USUARIO'    => $this->user,
     			'METODO'     => 'ecomClienteTodosConsulta',
           'SENHA'      => "" ,
-          'EMPRESACODIGO' => $code,
+          'EMPRESACODIGO' => $this->business_number,
           'SENHA_REF'  => $this->password,
     		);
 
@@ -52,6 +50,11 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
 
       $number = $this->getParamAddress($billingAddress, 2) ;
 
+      $neighborhood = $this->getParamAddress($billingAddress, 3) ;
+
+      if(is_null($neighborhood) or $neighborhood == "" )
+        $neighborhood = "nd";
+
       /*
         TODO obter o 'tipo pessoa desde o objeto Customer'
         verificar esquema com codigo do mounicipio
@@ -67,8 +70,8 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
               'CLIFORFISICOJURIDICO' => $cliforfisicojuridico,
               'CLIFORENDERECO' => $billingAddress['street'],
               'CLIFORDOCUMENTO' => $customerObj['taxvat'],
-              'CLIFORBAIRRO' => $billingAddress['neighborhood'],
-              'EMPRESACODIGO' => '0001',
+              'CLIFORBAIRRO' => $neighborhood, //$billingAddress['neighborhood'],
+              'EMPRESACODIGO' => $this->business_number,
               'MUNICIPIOCODIGOIBGE' => 09401,
               'CLIFORCEP' => $billingAddress['postcode'],
               'CLIFORTELEFONE' => $billingAddress['telephone'],
@@ -82,7 +85,18 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
             );
 
 
-            return $this->connectionGet($params);
+            $result = $this->connectionGet($params);
+
+            #Obtemos o codigo do cliente desde teorema e adicionamos ao cliente Magento
+            if(isset($result->CODIGO)){
+              if($result->CODIGO == 0){
+                echo "<br/>Customer " . $result->FIELDS->CLIFORCODIGO . " saved " ;
+
+
+              }
+            }
+
+            return $result ;
 
   }
 

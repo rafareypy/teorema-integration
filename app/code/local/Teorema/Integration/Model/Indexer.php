@@ -59,11 +59,7 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
        */
       public function matchEvent(Mage_Index_Model_Event $event)
       {
-
-
-        Mage::log("matchEvent", null, "indexer.log");
-
-
+          Mage::log("matchEvent", null, "indexer.log");
       }
 
       /**
@@ -73,19 +69,15 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
        */
       public function reindexAll()
       {
-
-
-
-
-
+          $this->updateStockProducts();
       }
 
 
       public function updateStockProducts()
       {
+          $serviceStock = Mage::getModel('teorema_integration/service_stock');
 
-      
-
+          $serviceStock->updateStock(array('processing','pending'));
       }
 
 

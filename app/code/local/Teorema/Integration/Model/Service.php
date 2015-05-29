@@ -13,8 +13,11 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
   protected $soap_url_wsdl ;
   protected $soap_domain ;
   protected $soap_port ;
-
-
+  protected $business_number ;
+  protected $moving_company ;
+  protected $vendor_code ;
+  protected $limit_attempts ;
+  protected $indexer_limit ;
 
   /**
    *
@@ -30,8 +33,28 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
       $this->password_config = Mage::getStoreConfig("teorema/teorema_integration/password");
       $this->password_md5   = md5($this->password.strtoupper($this->password_config));
       $this->soap_url_wsdl  = Mage::getStoreConfig("teorema/teorema_integration/soap_url_wsdl");
-      $this->soap_domain   = Mage::getStoreConfig("teorema/teorema_integration/soap_domain");
+      $this->soap_domain    = Mage::getStoreConfig("teorema/teorema_integration/soap_domain");
       $this->soap_port      = Mage::getStoreConfig("teorema/teorema_integration/soap_port");
+      $this->business_number= Mage::getStoreConfig("teorema/teorema_integration/business_number");
+      $this->moving_company = Mage::getStoreConfig("teorema/teorema_integration/moving_company");
+      $this->vendor_code    = Mage::getStoreConfig("teorema/teorema_integration/vendor_code");
+      $this->limit_attempts = Mage::getStoreConfig("teorema/teorema_integration/limit_attempts");
+      $this->indexer_limit  = Mage::getStoreConfig("teorema/teorema_integration/indexer_limit");
+      $this->cron_limit_search_webservice = Mage::getStoreConfig("teorema/teorema_integration/cron_limit_search_webservice");
+
+
+      if(is_null($this->limit_attempts))
+         $this->limit_attempts = 3 ;
+
+      if(is_null($this->indexer_limit))
+         $this->indexer_limit = 30 ;
+
+      if(is_null($this->indexer_limit))
+         $this->indexer_limit = 80 ;
+
+     if(is_null($this->cron_limit_search_webservice))
+          $this->cron_limit_search_webservice = 50;
+
   }
 
 

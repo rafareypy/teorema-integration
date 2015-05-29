@@ -80,16 +80,6 @@
                           <show_in_store>1</show_in_store>
                       </password>
 
-                      <businesscode translate="label">
-                          <label>EMPRESACODIGO</label>
-                          <comment>Ex.:0001 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>80</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </businesscode>
-
                       <cron_limit_search_webservice translate="label">
                           <label>Limite de consultas ao WebService 'atualizar estoque'</label>
                           <comment>Ex.:50 </comment>
@@ -132,6 +122,39 @@
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </limit_attempts>
+
+
+                      <business_number translate="label">
+                          <label>Codigo de empresa:</label>
+                          <comment>Ex.:0001 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>130</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </business_number>
+
+
+                      <moving_company translate="label">
+                          <label>Empresa Movimento:</label>
+                          <comment>Ex.:0001 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>140</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </moving_company>
+
+
+                      <vendor_code translate="label">
+                          <label>VENDEDORCODIGO:</label>
+                          <comment>Ex.:00001 </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>140</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </vendor_code>
 
 
                   </fields>
