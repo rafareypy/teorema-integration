@@ -47,6 +47,17 @@
             			</teorema_integration>
         		</indexer>
     		</index>
+        <events>
+  	      <checkout_cart_product_add_after>
+  	      		<observers>
+  		          <cart_observer>
+  		            <type>singleton</type>
+  		            <class>teorema_integration/cart_observer</class>
+  		            <method>checkingStockProduct</method>
+  		          </cart_observer>
+  		        </observers>
+  	      </checkout_cart_product_add_after>
+        </events>
     </global>
     <frontend>
         <routers>

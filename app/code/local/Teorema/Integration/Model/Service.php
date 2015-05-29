@@ -19,6 +19,7 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
   protected $limit_attempts ;
   protected $indexer_limit ;
 
+
   /**
    *
    */

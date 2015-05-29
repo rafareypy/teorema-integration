@@ -150,11 +150,22 @@
                           <label>VENDEDORCODIGO:</label>
                           <comment>Ex.:00001 </comment>
                           <frontend_type>text</frontend_type>
-                          <sort_order>140</sort_order>
+                          <sort_order>150</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </vendor_code>
+
+
+                      <message_error_add_product_cart translate="label">
+                          <label>Mensagem quando a quantidade do produto não esta disponivel:</label>
+                          <comment>Ex.:Desculpe porem não temos esta quantidade do produto disponivel </comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>150</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </message_error_add_product_cart>
 
 
                   </fields>
