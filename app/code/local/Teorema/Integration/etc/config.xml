@@ -37,6 +37,17 @@
                 </setup>
             </teorema_integration_setup>
         </resources>
+        <events>
+        <sales_order_save_after>
+          <observers>
+            <teorema_integration_save_order_after_observer>
+              <type>singleton</type>
+              <class>Teorema_Integration_Model_Order_Observer</class>
+              <method>synchronize_order</method>
+            </teorema_integration_save_order_after_observer>
+          </observers>
+        </sales_order_save_after>
+      </events>
     </global>
     <frontend>
         <routers>
