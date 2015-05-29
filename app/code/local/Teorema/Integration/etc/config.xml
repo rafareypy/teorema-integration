@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Teorema_Integration>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </Teorema_Integration>
     </modules>
     <global>
@@ -22,6 +22,9 @@
                     <teorema_integration>
                         <table>teorema_integration</table>
                     </teorema_integration>
+                    <teorema_integration_tableschanged>
+                        <table>teorema_integration_tables_changed</table>
+                    </teorema_integration_tableschanged>
                 </entities>
             </teorema_integration_mysql4>
         </models>
@@ -38,16 +41,23 @@
             </teorema_integration_setup>
         </resources>
         <events>
-        <sales_order_save_after>
-          <observers>
-            <teorema_integration_save_order_after_observer>
-              <type>singleton</type>
-              <class>Teorema_Integration_Model_Order_Observer</class>
-              <method>synchronize_order</method>
-            </teorema_integration_save_order_after_observer>
-          </observers>
-        </sales_order_save_after>
-      </events>
+          <sales_order_save_after>
+            <observers>
+              <teorema_integration_save_order_after_observer>
+                <type>singleton</type>
+                <class>Teorema_Integration_Model_Order_Observer</class>
+                <method>synchronize_order</method>
+              </teorema_integration_save_order_after_observer>
+            </observers>
+          </sales_order_save_after>
+        </events>
+        <index>
+        		<indexer>
+            			<teorema_integration>
+                				<model>teorema_integration/indexer</model>
+            			</teorema_integration>
+        		</indexer>
+    		</index>
     </global>
     <frontend>
         <routers>

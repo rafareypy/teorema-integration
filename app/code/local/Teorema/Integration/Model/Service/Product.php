@@ -136,6 +136,14 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
   }
 
+
+/*
+  Função que atualiza todo o estoque buscando valores no web service teorema para o Magento
+*/
+public function updateAllStockProducts(){
+
+}
+
   /*
     Função responsavel por criar produto Magento
     Recebe como parametro o objeto json Teorema webService
@@ -206,6 +214,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     $productMagento->setCategoryIds($category);
 
 
+    /*TODO verificar */
     $qty = 0;
     $availableBalance = Mage::getModel('teorema_integration/service_balance')
                                   ->availableBalance($productJson->ITEMREDUZIDO);
@@ -274,17 +283,15 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
     $resultSearch = $this->getAllProductsToTeorema();
 
-    $cont = 10 ;
-
+    $cont = 45 ;
 
     foreach ($resultSearch as $key => $productTeorema) {
 
 
-      if($cont <= 37){
-        echo "<br/>sku = " . $productTeorema->ITEMREDUZIDO . "<br/>" ;
-
+      if($cont <= 60){
+        echo "<br/> $cont sku = " . $productTeorema->ITEMREDUZIDO . "<br/>" ;
         //Metodo que ira verificar se o produto existe, se não existir cria o produto..
-        //$this->createProductMagento($productTeorema->ITEMREDUZIDO); //6745
+        $this->createProductMagento($productTeorema->ITEMREDUZIDO); //6745
       }
 
 
