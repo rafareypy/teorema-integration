@@ -42,7 +42,9 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
        #soma a quantidade de tentativas em atribuir o valor do estoque a este produto..
        $tableschanged = $this->sumTableschanged($tableschanged);
 
-       if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() < $this->limit_attempts and !is_null($sku)){
+
+       if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() < $this->limit_attempts and !is_null($sku))
+       {
 
          #obtemos a quantidade em estoque do produto
          $availableBalance = $serviceBalance->availableBalance($sku);
@@ -61,22 +63,29 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
                  'is_in_stock' => ($qty >= 0) ? true : false
                ));
 
+         try{
+           $productMagento->save();
+           $tableschanged->setStatus('processed');
+           $this->updateTablesChanged($tableschanged);
+         }catch(Exception $e){
+
+           $message = " Teorema_Integration_Model_Service_Stock :
+                          Error in update product  " . $e->getMessage() ;
+
+           $this->saveErrosLog($message);
+
+           Mage::log($message, null, "update_stock_error.log");
+         }
+
+
        }
+       #Em cado que a quantidade de tentativas supere o $this->limit_attempts então devemos trocar o status para Error
+       else if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() >= $this->limit_attempts and !is_null($sku))
+       {
 
-
-       try{
-         $productMagento->save();
-         $tableschanged->setStatus('processed');
+         $tableschanged->setStatus('error');
          $this->updateTablesChanged($tableschanged);
-       }catch(Exception $e){
 
-         $message = " Teorema_Integration_Model_Service_Stock :
-                        Error in update product  " . $e->getMessage() ;
-
-         $this->saveErrosLog($message);
-
-
-         Mage::log($message, null, "update_stock.log");
        }
 
      }
@@ -131,16 +140,16 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
   public function updateTablesChanged($tableschanged){
 
     try{
-
-      echo "<br/>Atualizando status de tabela alterada " . $tableschanged->getStatus() . "<br/>";
-
       $tableschanged->save();
     }catch(Exception $e){
       $tableschanged = null ;
 
-       Mage::log(" Teorema_Integration_Model_Service_Stock : Error in update tableschanged  " .
-                       $e->getMessage(),
-                       null, "update_stock.log");
+      $message = " Teorema_Integration_Model_Service_Stock : Error in update tableschanged  " . $e->getMessage() ;
+
+      $this->saveErrosLog($message);
+
+      Mage::log($message, null, "update_stock_error.log");
+
     }
 
     return $tableschanged ;

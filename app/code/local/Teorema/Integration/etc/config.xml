@@ -27,7 +27,7 @@
                     </teorema_integration_tableschanged>
                     <teorema_integration_errors>
                         <table>teorema_integration_errors</table>
-                    </teorema_integration_errors>                    
+                    </teorema_integration_errors>
                 </entities>
             </teorema_integration_mysql4>
         </models>
@@ -45,8 +45,13 @@
         </resources>
         <index>
         		<indexer>
+            			<teorema_integration_tab>
+                				<model>teorema_integration/indexer_tableschanged</model>
+            			</teorema_integration_tab>
+        		</indexer>
+            <indexer>
             			<teorema_integration>
-                				<model>teorema_integration/indexer</model>
+                				<model>teorema_integration/indexer_stock</model>
             			</teorema_integration>
         		</indexer>
     		</index>

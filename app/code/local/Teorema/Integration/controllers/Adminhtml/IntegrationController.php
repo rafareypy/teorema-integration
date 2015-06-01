@@ -158,7 +158,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     }
 
     /*Testes relacionados ao tabelas alteradas*/
-    public function newActionTables(){
+    public function newActionTablesChanged(){
       //die("testing update stock");
 
        //$service_stock = Mage::getModel('teorema_integration/service_stock');

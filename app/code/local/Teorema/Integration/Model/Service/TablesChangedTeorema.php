@@ -46,8 +46,15 @@ class Teorema_Integration_Model_Service_TablesChangedTeorema extends Teorema_Int
     #Otendo o ultimo registos de tabelas alteradas..
     $table = $tablesMagentochanged->getFirstItem();
 
+
+    /*refactor*/
+    $idMini = 9999 ;
+
+    if(!is_null($table) && !is_null($table->getLastIdUpdated()))
+      $idMini = $table->getLastIdUpdated() + 1 ;
+
     #Buscando tabelas alteradas
-    $tablesTeoremaChangedList = $this->getTablesChanged($table->getLastIdUpdated(), $this->cron_limit_search_webservice, null);
+    $tablesTeoremaChangedList = $this->getTablesChanged($idMini , $this->cron_limit_search_webservice, null);
 
     foreach ($tablesTeoremaChangedList as $key => $table)
     {
@@ -67,7 +74,7 @@ class Teorema_Integration_Model_Service_TablesChangedTeorema extends Teorema_Int
           #verificar quais adicionar
           case "ItemEstoque":
               $type = 'stock' ;
-              $id_value = $table->ITEMREDUZIDO;              
+              $id_value = $table->ITEMREDUZIDO;
             break;
 
           case "ClienteFornecedor":

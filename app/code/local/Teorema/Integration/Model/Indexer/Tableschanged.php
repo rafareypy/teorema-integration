@@ -1,5 +1,5 @@
 <?php
-class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstract
+class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_Indexer_Abstract
 {
 
   const EVENT_MATCH_RESULT_KEY = 'teorema_integration_match_result';
@@ -20,7 +20,7 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
   */
   public function getName()
   {
-      return 'Teorema-Integração';
+      return 'Teorema-Sincronização-Tabelas-Alteradas';
   }
 
   /**
@@ -28,13 +28,13 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
   */
   public function getDescription()
   {
-      return 'Sincroniza estoque Sistema Teorema com Loja Magento !';
+      return 'Sincroniza Tabelas Alteradas.!';
   }
 
 
       protected function _registerEvent(Mage_Index_Model_Event $event)
       {
-        Mage::log("_registerEvent", null, "indexer.log");
+        Mage::log("_registerEvent", null, "indexer_tables_changed.log");
 
 
       }
@@ -45,7 +45,7 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
        */
       protected function _processEvent(Mage_Index_Model_Event $event)
       {
-        Mage::log("_processEvent", null, "indexer.log");
+        Mage::log("_processEvent", null, "indexer_tables_changed.log");
 
 
 
@@ -59,7 +59,7 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
        */
       public function matchEvent(Mage_Index_Model_Event $event)
       {
-          Mage::log("matchEvent", null, "indexer.log");
+          Mage::log("matchEvent", null, "indexer_tables_changed.log");
       }
 
       /**
@@ -69,17 +69,18 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
        */
       public function reindexAll()
       {
-          $this->updateStockProducts();
+          $this->updateTablesChanged();
       }
 
 
-      public function updateStockProducts()
+      #Busca valores desde tabelas alteradas no WebService Teorema e sincroniza com Magento
+      public function updateTablesChanged()
       {
-          $serviceStock = Mage::getModel('teorema_integration/service_stock');
 
-          #Vai buscar dentro de tabelas alteradas todos os registros de estoque
-          #que esteja com status de processando ou pendente e vai atualizar valores
-          $serviceStock->updateStock(array('processing','pending'));
+        $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
+
+        $tableschangedTeoremaService->updateTablesChangedTeorema();
+
       }
 
 

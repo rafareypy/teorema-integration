@@ -5,4 +5,9 @@
           <block type="teorema_integration/adminhtml_modifiedtables" name="modifiedtables" />
       </reference>
     </teorema_integration_adminhtml_modifiedtables_index>
+    <teorema_integration_adminhtml_errors_index>
+      <reference name="content">
+          <block type="teorema_integration/adminhtml_errors" name="errors" />
+      </reference>
+    </teorema_integration_adminhtml_errors_index>
 </layout>
