@@ -19,7 +19,9 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
     que ja foram carregadas em outr processo
     Teorema_Integration_Model_Service_TablesChangedTeorema->updateTablesChangedTeorema
   */
-  public function updateStock($arrayStatus){
+  public function updateStock($arrayStatus, $idTableschanged){
+
+
 
       if(is_null($arrayStatus))
         $arrayStatus = array('pending');
@@ -31,7 +33,12 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
      /*TODO verificar que a busca seja por todos pendentes ou processando*/
      $collection =  Mage::getModel('teorema_integration/tableschanged')->getCollection();
      $collection->addFieldToFilter('status', $arrayStatus)->setPageSize($this->indexer_limit);
+
+     if(!is_null($idTableschanged))
+      $collection->addFieldToFilter('id', $idTableschanged);
+
      $collection->addFieldToFilter('type', 'stock')->load();
+
 
 
      foreach ($collection as $key => $tableschanged)

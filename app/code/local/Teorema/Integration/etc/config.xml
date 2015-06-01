@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Teorema_Integration>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </Teorema_Integration>
     </modules>
     <global>
@@ -28,6 +28,9 @@
                     <teorema_integration_errors>
                         <table>teorema_integration_errors</table>
                     </teorema_integration_errors>
+                    <teorema_integration_initial>
+                        <table>teorema_integration_initial</table>
+                    </teorema_integration_initial>
                 </entities>
             </teorema_integration_mysql4>
         </models>
@@ -44,6 +47,11 @@
             </teorema_integration_setup>
         </resources>
         <index>
+            <indexer>
+                <teorema_integration_two>
+                      <model>teorema_integration/indexer_tablesandstock</model>
+                </teorema_integration_two>
+            </indexer>
         		<indexer>
             			<teorema_integration_tab>
                 				<model>teorema_integration/indexer_tableschanged</model>

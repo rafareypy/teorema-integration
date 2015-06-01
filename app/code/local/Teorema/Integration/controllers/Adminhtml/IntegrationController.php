@@ -51,7 +51,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     }
 
 
-    public function newAction(){
+    public function newActionErrors(){
 
       $errors = Mage::getModel('teorema_integration/errors');
 
@@ -190,17 +190,61 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
-    public function newActionProduct() {
+    public function newAction() {
 
+      die("teste ok");
+
+
+      //$collection =  Mage::getModel('teorema_integration/errors')->getCollection();
+
+      $collection = Mage::getModel('teorema_integration/errors')->getCollection();
+
+
+      foreach ($collection as $key => $value) {
+        echo "<br/> valores ";
+      }
+
+      die("88888888");
+
+      try{
+
+
+        $errorsModel = Mage::getModel('teorema_integration/errors');
+
+        $errorsModel->setTablesChangedIdTeorema(1);
+        $errorsModel->setCode('1');
+        $errorsModel->setType('stock');
+        $errorsModel->setMessage("asdfasdf");
+        $errorsModel['id_tables_changed_magento'] = 8;
+
+
+        #verificar as variaveis se não vem como nulo e adicionanas do atualização do estoque
+        $errorsModel->save();
+        echo " model save";
+      }catch(Exception $e){
+        echo "Erro ao salvar errors <br/>" . $e->getMessage() ;
+        Mage::log("Error in save log Errors ", null, "service_log_errors.log");
+      }
+
+
+
+
+
+
+      die("77777");
 
       //$this->testCategories();
 
       //test ok
-      //$service = Mage::getModel('teorema_integration/service_product');
+      $service = Mage::getModel('teorema_integration/service_product');
 
       //$test = $service->getAllGroupedProductToTeorema();
 
-      //var_dump($service->getAllProductsToTeorema());
+      //var_dump(json_encode( $service->getAllProductsToTeorema()));
+
+      $service->initialCharge();
+
+      die("testes para a carga inicial");
       //var_dump( json_encode($service->getProductJsonToTeorema('006747')) );
 
 

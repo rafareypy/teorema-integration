@@ -81,6 +81,25 @@ class Teorema_Integration_Block_Adminhtml_Modifiedtables_Grid extends Mage_Admin
             'index'     => 'updated_at',
         ));
 
+				$this->addColumn('action',
+				    			array(
+				    					'header'    =>  "Processar",
+				    					'width'     => '100',
+				    					'type'      => 'action',
+				    					'getter'    => 'getId',
+				    					'actions'   => array(
+				    							array(
+				    									'caption'   => "Processar Novamente",
+				    									'url'       => array('base'=> 'teorema_integration/adminhtml_modifiedtables/trysend'),
+				    									'field'     => 'id'
+				    							)
+				    					),
+				    					'filter'    => false,
+				    					'sortable'  => false,
+				    					'index'     => 'stores',
+				    					'is_system' => true,
+				    			));
+
 
         return parent::_prepareColumns();
     }

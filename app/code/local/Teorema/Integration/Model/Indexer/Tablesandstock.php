@@ -1,5 +1,5 @@
 <?php
-class Teorema_Integration_Model_Indexer_Stock extends Mage_Index_Model_Indexer_Abstract
+class Teorema_Integration_Model_Indexer_Tablesandstock extends Mage_Index_Model_Indexer_Abstract
 {
 
   const EVENT_MATCH_RESULT_KEY = 'teorema_integration_match_result';
@@ -28,7 +28,7 @@ class Teorema_Integration_Model_Indexer_Stock extends Mage_Index_Model_Indexer_A
   */
   public function getDescription()
   {
-      return 'Sincroniza estoque Sistema Teorema com Loja Magento !';
+      return 'Sincroniza Tabelas modificadas e atualiza estoque.!';
   }
 
 
@@ -69,18 +69,22 @@ class Teorema_Integration_Model_Indexer_Stock extends Mage_Index_Model_Indexer_A
        */
       public function reindexAll()
       {
-          $this->updateStockProducts();
+          $this->updateTablesChangedAndupdateStockProducts();
       }
 
 
-      public function updateStockProducts()
+      public function updateTablesChangedAndupdateStockProducts()
       {
+
+          $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
 
           $serviceStock = Mage::getModel('teorema_integration/service_stock');
 
+          $tableschangedTeoremaService->updateTablesChangedTeorema();
+
           #Vai buscar dentro de tabelas alteradas todos os registros de estoque
           #que esteja com status de processando ou pendente e vai atualizar valores
-          $serviceStock->updateStock(array('processing','pending'), null);
+          $serviceStock->updateStock(array('processing','pending'));
       }
 
 

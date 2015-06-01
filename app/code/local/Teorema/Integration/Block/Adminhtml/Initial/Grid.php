@@ -1,5 +1,5 @@
 <?php
-class Teorema_Integration_Block_Adminhtml_Errors_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Teorema_Integration_Block_Adminhtml_Initial_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 	public function __construct()
     {
@@ -12,7 +12,7 @@ class Teorema_Integration_Block_Adminhtml_Errors_Grid extends Mage_Adminhtml_Blo
 
     protected function _prepareCollection()
     {
-				$collection =  Mage::getModel('teorema_integration/errors')->getCollection();
+				$collection =  Mage::getModel('teorema_integration/initial')->getCollection();
 
 				$this->setCollection($collection);
 
@@ -29,21 +29,28 @@ class Teorema_Integration_Block_Adminhtml_Errors_Grid extends Mage_Adminhtml_Blo
         ));
 
 
-				$this->addColumn('id_tables_changed_magento', array(
-            'header'    => 'id t.m. Mag.',
+				$this->addColumn('sku', array(
+            'header'    => 'sku',
             'align'     =>'left',
             'width'     => '50px',
-            'index'     => 'id_tables_changed_magento',
-        ));
-
-				$this->addColumn('tables_changed_id_teorema', array(
-            'header'    => 'id t.m. Teorema',
-            'align'     =>'left',
-            'width'     => '50px',
-            'index'     => 'tables_changed_id_teorema',
+            'index'     => 'sku',
         ));
 
 
+				$this->addColumn('status', array(
+            'header'    => 'status',
+            'align'     =>'left',
+            'width'     => '50px',
+            'index'     => 'status',
+        ));
+
+
+				$this->addColumn('number_of_retries', array(
+            'header'    => 'number_of_retries',
+            'align'     =>'left',
+            'width'     => '50px',
+            'index'     => 'number_of_retries',
+        ));
 
 
 				$this->addColumn('message', array(
@@ -54,29 +61,16 @@ class Teorema_Integration_Block_Adminhtml_Errors_Grid extends Mage_Adminhtml_Blo
         ));
 
 
-				$this->addColumn('code', array(
-            'header'    => 'Codigo',
+
+				$this->addColumn('created_at', array(
+            'header'    => 'created_at',
             'align'     =>'left',
             'width'     => '50px',
-            'index'     => 'code',
+            'index'     => 'created_at',
         ));
 
 
-				$this->addColumn('type', array(
-            'header'    => 'Tipo',
-            'align'     =>'left',
-            'width'     => '50px',
-            'index'     => 'type',
-        ));
 
-
-				$this->addColumn('updated_at', array(
-            'header'    => 'Data',
-            'align'     =>'left',
-            'width'     => '50px',
-            'index'     => 'updated_at',
-        ));
-			
         return parent::_prepareColumns();
     }
 

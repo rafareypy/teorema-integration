@@ -36,6 +36,54 @@ class Teorema_Integration_Adminhtml_ModifiedtablesController extends Mage_Adminh
         $this->_forward('edit');
     }
 
+		/*
+			Ação para que o usuario possa processar de forma 'manual'
+		*/
+		public function trysendAction(){
+
+			try{
+
+					$this->executeProcess($this->getRequest()->getParam('id'));
+
+					Mage::getSingleton('adminhtml/session')
+										->addSuccess('Tentava enviada, verifique o status.!');
+
+			}catch(Exception $e){
+						Mage::getSingleton('adminhtml/session')->addError('Erro ao tentar reenviar registro.!');
+						Mage::getSingleton('adminhtml/session')->addError('Erro :' . $e->getMessage());
+						Mage::log($e->getMessage(), null, "trysend_error.log");
+			}
+
+			$this->_redirect('*/*/');
+
+		}
+
+		public function executeProcess($id){
+
+			if(!is_null($id))
+			{
+				$collection = Mage::getModel('teorema_integration/tableschanged')->getCollection();
+				$collection->addFieldToFilter('id', $id);
+				$collection->load();
+
+				$model = $collection->getFirstItem();
+
+				$type = $model->getType() ;
+
+				switch($type){
+					case "stock":
+						$serviceStock = Mage::getModel('teorema_integration/service_stock');
+						$serviceStock->updateStock(array('processing','pending'), $id);
+					case "product":
+
+				}
+			}
+
+
+
+		}
+
+
     public function saveAction()
     {
 

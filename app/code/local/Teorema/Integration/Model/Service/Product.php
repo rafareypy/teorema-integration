@@ -105,9 +105,9 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
                         ->loadByAttribute('sku', $sku);
 
     if($product){
-      echo "<br> Product  existis $sku <br/> ------";
+      echo "<br>\n Product  existis $sku \n<br/> ";
     }else{
-        echo "<br/>Creating product<br/>";
+        echo "<br/>\nCreating product\n<br/>";
         #Se o produto não existe, então sera buscado o Json do mesmo no webService da Teorema..
         $productTeorema = $this->getProductJsonToTeorema($sku);
 
@@ -116,13 +116,16 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
         try {
           $product->save();
-          Mage::log("Produto " . $product->getSku() . " criado com sucesso. ", null, 'teorema_insert.log');
-          echo "<br/>Produto " . $product->getSku() . " criado com sucesso. ";
+          Mage::log("\nProduto " . $product->getSku() . " criado com sucesso. ", null, 'teorema_insert.log');
+          echo "<br/>\nProduto " . $product->getSku() . " criado com sucesso. ";
         } catch (Exception $e) {
-          //Mage::log($e->getMessage());
-          echo "<br/>Error in save Product <br/>";
-          echo "<br/>" . $e->getMessage() ;
-          echo "<br/>";
+          $message = "\nError in save Product\n " . $e->getMessage();
+          Mage::log($message, null, 'teorema_insert_error.log');
+
+          echo "<br/> \n " . $message ;
+
+          $this->saveErrosLog($message , '0', 'product', 0, 0);
+
         }
 
     }
@@ -315,7 +318,109 @@ public function updateAllStockProducts(){
   }
 
 
+  /*
+    Traz todos os skus (ITEMREDUZIDO) do web service teorema e insere na tabela teorema_integration_initial
+  */
+  public function chargeSkusTeoremaToInitialModel(){
 
+    echo "<br> \n Carregando todos os valores de ITEMREDUZIDO para o teorema_initial \n";
+
+    $arrayProductsSku = $this->getAllProductsToTeorema();
+
+    echo "<br/> \n Ja temos array com valores\n";
+
+    $i = 0 ;
+
+    foreach ($arrayProductsSku as $key => $p)
+    {
+
+
+
+      if($i <= $this->limit_load_products_sku){
+
+        try{
+          $initial = Mage::getModel('teorema_integration/initial');
+          $initial->setSku($p->ITEMREDUZIDO);
+          $initial->setStatus('pending');
+          $initial->setNumberOfRetries(0);
+          $initial->save();
+
+          echo "<br/> \n Criado Initial $i " ;
+
+        }catch(Exception $e){
+          //echo "<br/><br/>Error in Creatin Initial " . $e->getMessage();
+        }
+      }else{
+        echo "<br/> \n Finalizado por configurações do modulo.! ";
+        $break ;
+      }
+      $i++;
+    }
+
+  }
+
+  /*
+    Função para dar carga inicial dos produtos no magento
+    Busca todos os skus com status pending e cria
+  */
+  public function initialCharge(){
+
+    //$this->chargeSkusTeoremaToInitialModel();
+
+
+      $collection =  Mage::getModel('teorema_integration/initial')->getCollection();
+      $collection->addFieldToFilter('status', 'pending')->setPageSize($this->limit_load_products);
+      $collection->load();
+
+      echo " \nCarga inicial  \n <br/>";
+
+      $i = 0 ;
+      foreach ($collection as $key => $initial)
+      {
+
+        echo "<br/> \n Inserindo valores   \n <br/>  ";
+
+        $initial->setNumberOfRetries($initial->getNumberOfRetries() + 1);
+
+        if($initial->getNumberOfRetries() > $this->limit_attempts ){
+          $initial->setStatus('error');
+        }else{
+
+          $this->saveInitial($initial);
+          $product = $this->createProductMagento($initial->getSku());
+
+          if(!is_null($product) && !is_null($product->getId()) ){
+            $initial->setStatus('created');
+          }
+
+        }
+
+        $this->saveInitial($initial);
+
+        if($i >= $this->limit_load_products)
+          break ;
+
+         $i++ ;
+
+      }
+
+
+  }
+
+public function saveInitial($initial){
+
+
+  if(!is_null($initial)){
+
+    try{
+      $initial->save();
+    }catch(Exception $e){
+      echo "erro ao salvar " . $e->getMessage();
+    }
+
+  }
+
+}
 
 
 

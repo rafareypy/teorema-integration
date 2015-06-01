@@ -18,6 +18,8 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
   protected $vendor_code ;
   protected $limit_attempts ;
   protected $indexer_limit ;
+  protected $limit_load_products_sku ;
+  protected $limit_load_products ;
 
 
   /**
@@ -42,7 +44,8 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
       $this->limit_attempts = Mage::getStoreConfig("teorema/teorema_integration/limit_attempts");
       $this->indexer_limit  = Mage::getStoreConfig("teorema/teorema_integration/indexer_limit");
       $this->cron_limit_search_webservice = Mage::getStoreConfig("teorema/teorema_integration/cron_limit_search_webservice");
-
+      $this->limit_load_products_sku  = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products_sku");
+      $this->limit_load_products  = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products");
 
       if(is_null($this->limit_attempts))
          $this->limit_attempts = 3 ;
@@ -55,6 +58,13 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
      if(is_null($this->cron_limit_search_webservice))
           $this->cron_limit_search_webservice = 50;
+
+
+     if(is_null($this->limit_load_products_sku))
+          $this->limit_load_products_sku = 500;
+
+     if(is_null($this->limit_load_products))
+          $this->limit_load_products = 2;
 
   }
 
