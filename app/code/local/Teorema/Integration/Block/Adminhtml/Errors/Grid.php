@@ -26,12 +26,21 @@ class Teorema_Integration_Block_Adminhtml_Errors_Grid extends Mage_Adminhtml_Blo
             'index'     => 'id',
         ));
 
-				$this->addColumn('tables_changed_id', array(
-            'header'    => 'id teorema',
+				$this->addColumn('id_tables_changed_magento', array(
+            'header'    => 'id t.m. Mag.',
             'align'     =>'left',
             'width'     => '50px',
-            'index'     => 'tables_changed_id',
+            'index'     => 'id_tables_changed_magento',
         ));
+
+				$this->addColumn('tables_changed_id_teorema', array(
+            'header'    => 'id t.m. Teorema',
+            'align'     =>'left',
+            'width'     => '50px',
+            'index'     => 'tables_changed_id_teorema',
+        ));
+
+
 
 
 				$this->addColumn('message', array(

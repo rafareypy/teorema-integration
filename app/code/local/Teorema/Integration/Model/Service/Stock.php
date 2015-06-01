@@ -43,6 +43,7 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
        $tableschanged = $this->sumTableschanged($tableschanged);
 
 
+
        if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() < $this->limit_attempts and !is_null($sku))
        {
 
@@ -72,7 +73,9 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
            $message = " Teorema_Integration_Model_Service_Stock :
                           Error in update product  " . $e->getMessage() ;
 
-           $this->saveErrosLog($message);
+
+           $this->saveErrosLog($message, '0', 'stock', $tableschanged->getLastIdUpdated() , $tableschanged->getId());
+
 
            Mage::log($message, null, "update_stock_error.log");
          }
@@ -146,7 +149,7 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
       $message = " Teorema_Integration_Model_Service_Stock : Error in update tableschanged  " . $e->getMessage() ;
 
-      $this->saveErrosLog($message);
+      $this->saveErrosLog($message, '0', 'tableschanged', $tableschanged->getLastIdUpdated(), $tableschanged->getId());
 
       Mage::log($message, null, "update_stock_error.log");
 

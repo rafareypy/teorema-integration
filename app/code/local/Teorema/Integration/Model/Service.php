@@ -167,16 +167,20 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
   /*
     Função responsavel por guardar os logs de erro relacionados ao modulo Teorema Integration..
   */
-  public function saveErrosLog($message , $code, $type, $tablesChangedId)
+  public function saveErrosLog($message , $code, $type, $tablesChangedIdTeorema, $idTablesChangedMagento)
   {
 
     try{
+
+
       $errorsModel = Mage::getModel('teorema_integration/errors');
 
-      $errorsModel->setTablesChangedId($tablesChangedId);
+      $errorsModel->setTablesChangedIdTeorema($tablesChangedIdTeorema);
       $errorsModel->setCode($code);
       $errorsModel->setType($type);
       $errorsModel->setMessage($message);
+      $errorsModel['id_tables_changed_magento'] = $idTablesChangedMagento;
+
 
       #verificar as variaveis se não vem como nulo e adicionanas do atualização do estoque
       $errorsModel->save();
