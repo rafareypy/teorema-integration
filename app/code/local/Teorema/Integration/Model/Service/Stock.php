@@ -34,7 +34,6 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
      $collection->addFieldToFilter('type', 'stock')->load();
 
 
-
      foreach ($collection as $key => $tableschanged)
      {
        //Otendo o sku do produto que foi alterado
@@ -70,9 +69,14 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
          $tableschanged->setStatus('processed');
          $this->updateTablesChanged($tableschanged);
        }catch(Exception $e){
-         Mage::log(" Teorema_Integration_Model_Service_Stock :
-                        Error in update product  " . $e->getMessage(),
-                         null, "update_stock.log");
+
+         $message = " Teorema_Integration_Model_Service_Stock :
+                        Error in update product  " . $e->getMessage() ;
+
+         $this->saveErrosLog($message);
+
+
+         Mage::log($message, null, "update_stock.log");
        }
 
      }

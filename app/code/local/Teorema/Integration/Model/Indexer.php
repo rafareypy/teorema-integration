@@ -77,6 +77,8 @@ class Teorema_Integration_Model_Indexer extends Mage_Index_Model_Indexer_Abstrac
       {
           $serviceStock = Mage::getModel('teorema_integration/service_stock');
 
+          #Vai buscar dentro de tabelas alteradas todos os registros de estoque
+          #que esteja com status de processando ou pendente e vai atualizar valores
           $serviceStock->updateStock(array('processing','pending'));
       }
 

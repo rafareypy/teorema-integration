@@ -23,6 +23,8 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
 
 
+
+
     /*Testes order*/
     public function newActionOrder() {
 
@@ -46,6 +48,33 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
       }
 
       die();
+    }
+
+
+    public function newAction(){
+
+      $errors = Mage::getModel('teorema_integration/errors');
+
+
+
+      $errors->setTablesChangedId(1);
+      $errors->setCode("1");
+      $errors->setCode("1");
+      $errors->setType("stock");
+      $errors->setMessage("testign");
+
+      try{
+          $errors->save();
+          echo "<br/> Dados salvos com exito ";
+      }catch(Exception $e){
+        echo "<br/> Erro ao tentar salvar os dados ";
+      }
+
+
+
+
+      die("<br/> Testing table erros ");
+
     }
 
     /*
@@ -129,7 +158,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     }
 
     /*Testes relacionados ao tabelas alteradas*/
-    public function newAction(){
+    public function newActionTables(){
       //die("testing update stock");
 
        //$service_stock = Mage::getModel('teorema_integration/service_stock');
