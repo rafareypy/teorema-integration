@@ -11,13 +11,18 @@
                     <action>teorema_integration/adminhtml_modifiedtables</action>
                 </tabela>
                 <tabelacolor>
-                    <title>Verificar produtos Atualizados</title>
+                    <title>Verificar Erros da Entegração</title>
                     <sort_order>20</sort_order>
-                    <action>teorema_integration/adminhtml_modifiedtables</action>
+                    <action>teorema_integration/adminhtml_errors</action>
                 </tabelacolor>
+                <initial_charge>
+                    <title>Skus (ITEMREDUZIDO) para carga inicial</title>
+                    <sort_order>30</sort_order>
+                    <action>teorema_integration/adminhtml_initial</action>
+                </initial_charge>
                 <integration>
                     <title>Integração Teorema</title>
-                    <sort_order>30</sort_order>
+                    <sort_order>60</sort_order>
                     <action>teorema_integration/adminhtml_integration</action>
                 </integration>
             </children>

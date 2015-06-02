@@ -20,7 +20,7 @@ class Teorema_Integration_Model_Service_Balance extends Teorema_Integration_Mode
       'EMPRESAITEM' => '0001',
       'ITEMREDUZIDO' => $sku,
       'SENHA'     => $this->password_md5,
-      'EMPRESAMOVIMENTO' =>  '0001',
+      'EMPRESAMOVIMENTO' =>  $this->moving_company,
       'SENHA_REF' => $this->password,
     );
 
@@ -41,7 +41,7 @@ class Teorema_Integration_Model_Service_Balance extends Teorema_Integration_Mode
       'EMPRESAITEM' => '0001',
       'ITEMREDUZIDO'  => $sku,
       'SENHA'     => $this->password_md5,
-      'EMPRESAMOVIMENTO' =>  '0001',
+      'EMPRESAMOVIMENTO' =>  $this->moving_company,
       'SENHA_REF' => $this->password
     );
 
@@ -59,13 +59,10 @@ class Teorema_Integration_Model_Service_Balance extends Teorema_Integration_Mode
     			'CLIFORCODIGO' => $code,
     			'SENHA_REF'  => $this->password,
     			'SENHA'      => "" ,
-    			'EMPRESACODIGO' => $code,
+    			'EMPRESACODIGO' => $this->business_number,
     		);
 
-
-    $result = $this->connectionGet($param);
-
-    return $result ;
+    return $this->connectionGet($param);
 
   }
 

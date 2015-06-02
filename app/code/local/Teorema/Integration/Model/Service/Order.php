@@ -10,8 +10,6 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
 
   }
 
-
-
   public function sendOrderMagentoToTeorema($order = null){
 
     #verificar se cliente ja existe no Webservice
@@ -21,7 +19,7 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
 
     $service = Mage::getModel('teorema_integration/service_customer');
 
-    $customers = $service->getAllCustomersToTeorema() ;
+    //$customers = $service->getAllCustomersToTeorema() ;
 
     #fazendo teste com outro codigo de cliente, que esta no teorema, porem não foi cadastrado pelo modulo de integração
     $cliforcodigo = "0002513" ;
@@ -86,22 +84,19 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
         'EMPRESAVENDEDOR'=>'0001',
         'VENDADATALANCAMENTO'=> date("Y-m-d"),
         'VENDASITUACAO'=>'A',
-        'VENDEDORCODIGO'=>'00001',
-        'VENDAVALORTOTALLIQUIDO'=> 25 ;// number_format($order->getGrandTotal(), 2, ',', ''),
+        'VENDEDORCODIGO'=> $this->vendor_code,
+        'VENDAVALORTOTALLIQUIDO'=> 25 ,// number_format($order->getGrandTotal(), 2, ',', ''),
         //'VENDAVALORTOTALLIQUIDO'=> '25,00',
 
         'EMPRESACLIFOR'=>'0001',
         'VENDADATAEMISSAO'=> date("Y-m-d"),
         'VENDANUMERO'=> $order->getIncrementId(), #verificar se precisa enviar..?
 
-        'EMPRESAMOVIMENTO'=>'0001',
+        'EMPRESAMOVIMENTO'=> $this->moving_company,
         'SENHA_REF'  => $this->password ,
         'VENDAVALORDESCONTO'=> 0,
         'CONDICAOCODIGO'=>'0001'  #este valor foi contrado no banco teorema
       );
-
-
-
 
       //campos que não esta no manual, porem são campos no modelo   br.inf.teorema.pitagoras.business.model.entity.VendaMasterBasic:
 
@@ -122,9 +117,6 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
       //vendaDataPrevistaEntrega
       //vendaNumeroRequisicao
 
-      var_dump(json_encode($params));
-
-      echo "<br/><br/><br/><br/>";
 
       $value = $this->connectionGet($params);
 

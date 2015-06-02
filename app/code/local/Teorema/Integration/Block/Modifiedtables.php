@@ -5,9 +5,6 @@ class Teorema_Integration_Block_Adminhtml_Modifiedtables extends Mage_Adminhtml_
 		public function __construct()
     {
 
-			echo "construct to Teorema_Integration_Block_Adminhtml_Modifiedtables ";
-			die();
-
         $this->_controller = 'adminhtml_modifiedtables';
         $this->_blockGroup = 'teorema_integration';
         $this->_headerText = 'Tabelas Modificadas';

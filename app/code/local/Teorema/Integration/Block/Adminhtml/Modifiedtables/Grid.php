@@ -12,7 +12,7 @@ class Teorema_Integration_Block_Adminhtml_Modifiedtables_Grid extends Mage_Admin
 
     protected function _prepareCollection()
     {
-				$collection = Mage::getModel('catalog/product')->getCollection();
+				$collection =  Mage::getModel('teorema_integration/tableschanged')->getCollection();
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -26,6 +26,79 @@ class Teorema_Integration_Block_Adminhtml_Modifiedtables_Grid extends Mage_Admin
             'width'     => '50px',
             'index'     => 'id',
         ));
+
+				$this->addColumn('last_id_updated', array(
+            'header'    => 'Id Tabelas Alt. T.',
+            'align'     =>'left',
+            'width'     => '50px',
+            'index'     => 'last_id_updated',
+        ));
+
+
+				$this->addColumn('status', array(
+            'header'    => 'Estado:',
+            'align'     =>'left',
+            'width'     => '50px',
+            'index'     => 'status',
+        ));
+
+
+				$this->addColumn('code', array(
+            'header'    => 'Est. codigo:',
+            'align'     =>'left',
+            'width'     => '5px',
+            'index'     => 'code',
+        ));
+
+
+				$this->addColumn('number_of_retries', array(
+            'header'    => 'Tentativas:',
+            'align'     =>'left',
+            'width'     => '10px',
+            'index'     => 'number_of_retries',
+        ));
+
+
+				$this->addColumn('id_value', array(
+            'header'    => 'Codigo:',
+            'align'     =>'left',
+            'width'     => '10px',
+            'index'     => 'id_value',
+        ));
+
+				$this->addColumn('type', array(
+            'header'    => 'Tipo:',
+            'align'     =>'left',
+            'width'     => '10px',
+            'index'     => 'type',
+        ));
+
+
+				$this->addColumn('updated_at', array(
+            'header'    => 'Ultima Atulização:',
+            'align'     =>'left',
+            'width'     => '10px',
+            'index'     => 'updated_at',
+        ));
+
+				$this->addColumn('action',
+				    			array(
+				    					'header'    =>  "Processar",
+				    					'width'     => '100',
+				    					'type'      => 'action',
+				    					'getter'    => 'getId',
+				    					'actions'   => array(
+				    							array(
+				    									'caption'   => "Processar Novamente",
+				    									'url'       => array('base'=> 'teorema_integration/adminhtml_modifiedtables/trysend'),
+				    									'field'     => 'id'
+				    							)
+				    					),
+				    					'filter'    => false,
+				    					'sortable'  => false,
+				    					'index'     => 'stores',
+				    					'is_system' => true,
+				    			));
 
 
         return parent::_prepareColumns();

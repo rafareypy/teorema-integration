@@ -10,4 +10,7 @@ class Teorema_Integration_Block_Adminhtml_Modifiedtables extends Mage_Adminhtml_
         $this->_addButtonLabel = 'Adiciona novo registro';
         parent::__construct();
     }
+
+
+		
 }

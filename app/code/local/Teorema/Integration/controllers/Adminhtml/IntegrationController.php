@@ -23,10 +23,12 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
 
 
+
+
     /*Testes order*/
     public function newActionOrder() {
 
-      die("Enviando pedidos");
+      //die("Enviando pedidos");
 
       $orders = Mage::getModel('sales/order')->getCollection();
 
@@ -37,7 +39,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
         #este pedido foi realizado por um cliente e com produtos importados do webservice teorema
         if($order->getIncrementId() == 145000008){
-          //echo "<br/> Values to Order : " . $order->getIncrementId();
+          echo "<br/> Values to Order : " . $order->getIncrementId();
           $service->sendOrderMagentoToTeorema($order);
         }
 
@@ -46,6 +48,33 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
       }
 
       die();
+    }
+
+
+    public function newActionErrors(){
+
+      $errors = Mage::getModel('teorema_integration/errors');
+
+
+
+      $errors->setTablesChangedId(1);
+      $errors->setCode("1");
+      $errors->setCode("1");
+      $errors->setType("stock");
+      $errors->setMessage("testign");
+
+      try{
+          $errors->save();
+          echo "<br/> Dados salvos com exito ";
+      }catch(Exception $e){
+        echo "<br/> Erro ao tentar salvar os dados ";
+      }
+
+
+
+
+      die("<br/> Testing table erros ");
+
     }
 
     /*
@@ -57,12 +86,10 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       $service = Mage::getModel('teorema_integration/service_customer');
 
-      var_dump($service->getAllCustomersToTeorema());
-      die();
+      //var_dump($service->getAllCustomersToTeorema());
+      //die();
 
       echo "<br/>Creating Customer<br/>";
-
-
 
       #Pendencias:
       #Criar bairro para o cliente
@@ -82,31 +109,57 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
         foreach ($collection as $customer)
         {
 
-            if($customer->getId() == 143){
-              var_dump($customer);
-              die();
-                //$result = $service->createCustomerToTeorema($customer) ;
+            if($customer->getId() == 147){
+                $result = $service->createCustomerToTeorema($customer) ;
+
+
+                if(isset($result->CODIGO)){
+                  if($result->CODIGO == 0){
+                    echo "<br/>Customer " . $result->FIELDS->CLIFORNOME . " saved " ;
+
+                      try{
+                        //include code teorema in customer Magento
+
+                      }catch(Exception $e){
+                        echo "error in save customer to Magento <br/> " . $e->getMessage();
+                      }
+
+                  }else{
+                    echo "error in save customer <br/> " . $result->ERRO;
+                  }
+                }else{
+                  echo "<br/>error in Saving customer <br/>" ;
+                }
+
+
             }
 
         }
 
-        if(isset($result->CODIGO)){
-          if($result->CODIGO == 0){
-            echo "<br/>Customer " . $result->FIELDS->CLIFORNOME . " saved " ;
-          }else{
-            echo "error in save customer <br/> " . $result->ERRO;
-          }
-        }else{
-          echo "<br/>error in Saving customer <br/>" ;
-        }
+
+
+
+ /*
+        echo "<br/><br/><br/>";
+        var_dump($result->FIELDS->CLIFORCODIGO);
+
+        echo "<br/><br/>";
+
+        var_dump($result->CODIGO);
+        echo "<br/><br/><br/><br/><br/>";
+
+        var_dump($result->CLIFORCODIGO);
+
+        echo "<br/><br/><br/><br/>";
+*/
+        var_dump($result);
+        die();
 
     }
 
     /*Testes relacionados ao tabelas alteradas*/
-    public function newAction(){
+    public function newActionTablesChanged(){
       //die("testing update stock");
-
-
 
        //$service_stock = Mage::getModel('teorema_integration/service_stock');
 
@@ -137,17 +190,61 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
-    public function newActionProduct() {
+    public function newAction() {
 
+      die("teste ok");
+
+
+      //$collection =  Mage::getModel('teorema_integration/errors')->getCollection();
+
+      $collection = Mage::getModel('teorema_integration/errors')->getCollection();
+
+
+      foreach ($collection as $key => $value) {
+        echo "<br/> valores ";
+      }
+
+      die("88888888");
+
+      try{
+
+
+        $errorsModel = Mage::getModel('teorema_integration/errors');
+
+        $errorsModel->setTablesChangedIdTeorema(1);
+        $errorsModel->setCode('1');
+        $errorsModel->setType('stock');
+        $errorsModel->setMessage("asdfasdf");
+        $errorsModel['id_tables_changed_magento'] = 8;
+
+
+        #verificar as variaveis se não vem como nulo e adicionanas do atualização do estoque
+        $errorsModel->save();
+        echo " model save";
+      }catch(Exception $e){
+        echo "Erro ao salvar errors <br/>" . $e->getMessage() ;
+        Mage::log("Error in save log Errors ", null, "service_log_errors.log");
+      }
+
+
+
+
+
+
+      die("77777");
 
       //$this->testCategories();
 
       //test ok
-      //$service = Mage::getModel('teorema_integration/service_product');
+      $service = Mage::getModel('teorema_integration/service_product');
 
       //$test = $service->getAllGroupedProductToTeorema();
 
-      //var_dump($service->getAllProductsToTeorema());
+      //var_dump(json_encode( $service->getAllProductsToTeorema()));
+
+      $service->initialCharge();
+
+      die("testes para a carga inicial");
       //var_dump( json_encode($service->getProductJsonToTeorema('006747')) );
 
 
