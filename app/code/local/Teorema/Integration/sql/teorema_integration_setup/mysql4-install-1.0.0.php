@@ -22,7 +22,38 @@ CREATE TABLE `{$tableName}` (
 PRIMARY KEY ( `id` )
 ) ENGINE = InnoDB;
 SQLTEXT;
-
 $installer->run($sql);
+
+/* Customer */
+$setup = new Mage_Eav_Model_Entity_Setup('core_setup');
+
+$entityTypeId     = $setup->getEntityTypeId('customer');
+$attributeSetId   = $setup->getDefaultAttributeSetId($entityTypeId);
+$attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
+
+
+//add teorema code client
+$setup->addAttribute('customer', 'teorema_code', array(
+    'type' => 'varchar',
+    'input' => 'text',
+    'label' => 'Teorema Codigo',
+    'visible' => 1,
+    'required' => 0,
+    'user_defined' => 0,
+    'comment' => 'Código do cliente no sistema de gestão da teorema'
+));
+
+$setup->addAttributeToGroup(
+	$entityTypeId,
+	$attributeSetId,
+	$attributeGroupId,
+	'teorema_code',
+	'999' //sort_order
+);
+
+Mage::getSingleton('eav/config')
+		->getAttribute('customer', 'teorema_code')
+		->setData('used_in_forms', array('customer_account_create','customer_account_edit','adminhtml_customer'))
+		->save();
 
 $installer->endSetup();
