@@ -37,3 +37,4 @@ class Teorema_Integration_IndexController extends Mage_Core_Controller_Front_Act
         exit;
     }
 }
+}
