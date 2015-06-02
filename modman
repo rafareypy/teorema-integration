@@ -1,5 +1,4 @@
-app/code/local/Teorema/Integration										app/code/local/Teorema/Integration
+app/code/local/Teorema/Integration									app/code/local/Teorema/Integration
 app/etc/modules/Teorema_Integration.xml  						app/etc/modules/Teorema_Integration.xml
 app/design/adminhtml/default/default/layout/teorema/teorema_integration.xml		app/design/adminhtml/default/default/layout/teorema/teorema_integration.xml
-
-
+shel/teorema                                        shel/teorema
