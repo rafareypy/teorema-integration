@@ -34,7 +34,7 @@ $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attribute
 
 //add teorema code client
 $setup->addAttribute('customer', 'teorema_code', array(
-    'type' => 'int',
+    'type' => 'varchar',
     'input' => 'text',
     'label' => 'Teorema Codigo',
     'visible' => 1,
