@@ -159,7 +159,7 @@
 
                       <message_error_add_product_cart translate="label">
                           <label>Mensagem quando a quantidade do produto não esta disponivel:</label>
-                          <comment>Ex.:Desculpe porem não temos esta quantidade do produto disponivel </comment>
+                          <comment>Ex.:Desculpe, não temos esta quantidade do produto disponível no momento </comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>150</sort_order>
                           <show_in_default>1</show_in_default>
@@ -188,8 +188,16 @@
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </limit_load_products>
-
-
+                      
+                      <init_value_changed_tables translate="label">
+                          <label>Valor inicial do identificador(ID) da tabelas alteradas</label>
+                          <comment>Ex.:1 - (usado somente após primeira carga de produtos)</comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>180</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </init_value_changed_tables>
                   </fields>
               </teorema_integration>
           </groups>
