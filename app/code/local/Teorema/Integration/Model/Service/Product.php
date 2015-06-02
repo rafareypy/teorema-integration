@@ -114,47 +114,27 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
         #Obtendo um novo produto Magento
         $product     = $this->getNewProductMagentoToJson($productTeorema);
 
-        try {
-          $product->save();
-          Mage::log("\nProduto " . $product->getSku() . " criado com sucesso. ", null, 'teorema_insert.log');
-          echo "<br/>\nProduto " . $product->getSku() . " criado com sucesso. ";
-        } catch (Exception $e) {
-          $message = "\nError in save Product\n " . $e->getMessage();
-          Mage::log($message, null, 'teorema_insert_error.log');
-
-          echo "<br/> \n " . $message ;
-
-          $this->saveErrosLog($message , '0', 'product', 0, 0);
-
-        }
-
+        $product = $this->saveProduct($product);
     }
 
     return $product ;
   }
 
 
-/*
-  Função que atualiza todo o estoque buscando valores no web service teorema para o Magento
-*/
-public function updateAllStockProducts(){
-
-}
 
   /*
     Função responsavel por criar produto Magento
     Recebe como parametro o objeto json Teorema webService
   */
-  public function getNewProductMagentoToJson($productJson){
+  public function getNewProductMagentoToJson($productJson, $productMagentoUpdate){
 
-
-    //$category = array(0 => "2" );
 
     $category = array(1, 3);
 
-    //{ [0]=> string(1) "2" [1]=> string(1) "3" [2]=> string(1) "4" }
-
     $productMagento = Mage::getModel('catalog/product');
+
+    if(!is_null($productMagentoUpdate) && !is_null($productMagentoUpdate->getId())  )
+      $productMagento = $productMagentoUpdate ;
 
     #Falta:
     #verifica grupos e subgrupos 'possivelmente é a categoria no magento'
@@ -303,19 +283,6 @@ public function updateAllStockProducts(){
   }
 
 
-  public  function test(){
-
-     $p = array(
-         'USUARIO' 	=> $this->user,
-         'METODO' 	=> 'ecomConsultaUsuarios',
-         'SENHA' 	  => $this->password ,
-         'SISTEMA' 	=> 'ecommerce',
-         'SENHA_REF' => $this->senha,
-       );
-
-       $result = $this->connectionGet($params);
-
-  }
 
 
   /*
@@ -333,8 +300,6 @@ public function updateAllStockProducts(){
 
     foreach ($arrayProductsSku as $key => $p)
     {
-
-
 
       if($i <= $this->limit_load_products_sku){
 
@@ -421,6 +386,108 @@ public function saveInitial($initial){
   }
 
 }
+
+  /*
+    Função responsavel por atualizar ou criar produtos no Magento, que esteja em tabelas alteradas
+  */
+  public function updateProductsToTablesChanged($arrayStatus, $idTableschanged ){
+
+    if(is_null($arrayStatus))
+      $arrayStatus = array('pending');
+
+    /*TODO verificar que a busca seja por todos pendentes ou processando*/
+    $collection =  Mage::getModel('teorema_integration/tableschanged')->getCollection();
+    $collection->addFieldToFilter('status', $arrayStatus)->setPageSize($this->indexer_limit);
+
+    if(!is_null($idTableschanged))
+      $collection->addFieldToFilter('id', $idTableschanged);
+
+    $collection->addFieldToFilter('type', 'product')->load();
+
+    $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
+
+     foreach ($collection as $key => $tableschanged)
+     {
+       $sku = $tableschanged->getIdValue() ;
+       echo "<br/> \n Encontramos valores $sku <br/> \n";
+
+       $tableschanged = $tableschangedTeoremaService->sumTableschanged($tableschanged);
+
+       if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() < $this->limit_attempts and !is_null($sku)  ){
+
+             $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+
+             if(!$product or is_null($product)){
+               echo "<br/> \n Indexer creating product  $sku";
+               $product = $this->createProductMagento($sku);
+             }else{
+               echo "<br/> \n Indexer updating product  $sku";
+
+               $product = $this->getProductOrCreateMagento($sku);
+
+               #produto existe, então sera buscado o Json do mesmo no webService da Teorema..
+               $productTeorema = $this->getProductJsonToTeorema($sku);
+
+               #Obtendo um novo produto Magento com os valores atualizados do web service teorema
+               $productUpdated   = $this->getNewProductMagentoToJson($productTeorema, $product);
+
+               $product  = $this->saveProduct($productUpdated);
+
+               echo "<br/> \n Produto atualizado. <br/> \n";
+             }
+
+             if(!is_null($product) && !is_null($product->getId())){
+               $tableschanged->setStatus('processed');
+               $tableschanged = $tableschangedTeoremaService->updateTablesChanged($tableschanged);
+             }
+
+       }else{
+         echo "<br/> \n numero de tentativas excedeu o maximo ";
+         $tableschanged->setStatus('error');
+         $tableschangedTeoremaService->updateTablesChanged($tableschanged);
+       }
+
+     }
+
+  }
+
+
+
+  public function saveProduct($productMagento){
+
+    $productReturn = null ;
+    if(!is_null($productMagento)){
+      try {
+        $productMagento->save();
+        $productReturn = $productMagento ;
+      } catch (Exception $e) {
+        $message = "\nError in save Product\n " . $e->getMessage();
+        Mage::log($message, null, 'teorema_insert_error.log');
+        echo "<br/> \n " . $message ;
+        $this->saveErrosLog($message , '0', 'product', 0, 0);
+      }
+    }
+    return $productReturn ;
+  }
+
+  /*
+    Função responsavel por buscar o produto dentro do Magento, caso o mesmo não exista sera criado..
+  */
+  public function getProductOrCreateMagento($sku){
+
+    $product = null ;
+
+    if(!is_null($sku)){
+      $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
+      /*TODO refactor*/
+      if(!$product or is_null($product)){
+        $product = $this->createProductMagento($sku);
+      }else{
+        $product = Mage::getModel('catalog/product')->load($product->getId());
+      }
+    }
+    return $product ;
+  }
 
 
 

@@ -1,5 +1,5 @@
 <?php
-class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_Indexer_Abstract
+class Teorema_Integration_Model_Indexer_Product extends Mage_Index_Model_Indexer_Abstract
 {
 
   const EVENT_MATCH_RESULT_KEY = 'teorema_integration_match_result';
@@ -28,13 +28,13 @@ class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_I
   */
   public function getDescription()
   {
-      return 'Sincroniza Tabelas Alteradas.!';
+      return 'Sincroniza produtos Sistema Teorema Magento.!';
   }
 
 
       protected function _registerEvent(Mage_Index_Model_Event $event)
       {
-        Mage::log("_registerEvent", null, "indexer_tables_changed.log");
+        Mage::log("_registerEvent", null, "indexer.log");
 
 
       }
@@ -45,7 +45,7 @@ class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_I
        */
       protected function _processEvent(Mage_Index_Model_Event $event)
       {
-        Mage::log("_processEvent", null, "indexer_tables_changed.log");
+        Mage::log("_processEvent", null, "indexer.log");
 
 
 
@@ -59,7 +59,7 @@ class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_I
        */
       public function matchEvent(Mage_Index_Model_Event $event)
       {
-          Mage::log("matchEvent", null, "indexer_tables_changed.log");
+          Mage::log("matchEvent", null, "indexer.log");
       }
 
       /**
@@ -69,17 +69,17 @@ class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_I
        */
       public function reindexAll()
       {
-        $this->updateTablesChanged();
+          $this->updateProductsToTablesChanged();
       }
 
 
-      #Busca valores desde tabelas alteradas no WebService Teorema e sincroniza com Magento
-      public function updateTablesChanged()
+      public function updateProductsToTablesChanged()
       {
 
-        $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
+        $serviceProduct = Mage::getModel('teorema_integration/service_product');
 
-        $tableschangedTeoremaService->updateTablesChangedTeorema();
+        $serviceProduct->updateProductsToTablesChanged(array('processing','pending'));
+
 
       }
 

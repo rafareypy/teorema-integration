@@ -73,6 +73,11 @@
                 				<model>teorema_integration/indexer_stock</model>
             			</teorema_integration>
         		</indexer>
+            <indexer>
+            			<teorema_integration_product>
+                				<model>teorema_integration/indexer_product</model>
+            			</teorema_integration_product>
+        		</indexer>
     		</index>
         <events>
   	      <checkout_cart_product_add_after>

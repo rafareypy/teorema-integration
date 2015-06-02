@@ -7,11 +7,11 @@ $installer->run("
 	CREATE TABLE {$this->getTable('teorema_integration_tables_changed')} (
 	  `id` int(11) unsigned NOT NULL auto_increment,
 	  `last_id_updated` int(11) unsigned NOT NULL,
-    `status`  ENUM('pending', 'processed', 'processing'),
+    `status`  ENUM('pending', 'processed', 'processing','error'),
     `code` int(10) unsigned NOT NULL default '0',
     `number_of_retries` int(3) unsigned NOT NULL default '0',
     `id_value` varchar (64) default NULL,
-    `type`  ENUM('stock', 'product', 'order', 'customer'),
+    `type`  ENUM('stock', 'product', 'order', 'customer', 'other', 'item_plan_price_movement', 'payment_condition', 'business', 'mark'),
     `created_at` DATETIME NOT NULL ,
     `updated_at` DATETIME NOT NULL ,
 	  PRIMARY KEY (`id`)

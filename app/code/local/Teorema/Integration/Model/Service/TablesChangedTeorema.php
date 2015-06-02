@@ -48,7 +48,7 @@ class Teorema_Integration_Model_Service_TablesChangedTeorema extends Teorema_Int
 
 
     /*refactor*/
-    $idMini = 9999 ;
+    $idMini = 1 ;
 
     if(!is_null($table) && !is_null($table->getLastIdUpdated()))
       $idMini = $table->getLastIdUpdated() + 1 ;
@@ -123,6 +123,45 @@ class Teorema_Integration_Model_Service_TablesChangedTeorema extends Teorema_Int
 
 
   }
+
+  public function sumTableschanged($tableschanged){
+
+    if(is_null($tableschanged))
+      return null ;
+
+    #Verifica limite de tentativas para atualizar..
+    $tableschanged->setNumberOfRetries($tableschanged->getNumberOfRetries() + 1);
+
+
+    if($tableschanged->getNumberOfRetries() < ($this->limit_attempts + 1)){
+      $tableschanged->setStatus('processing');
+      $this->updateTablesChanged($tableschanged);
+    }
+
+    return $tableschanged ;
+
+  }
+
+
+  public function updateTablesChanged($tableschanged){
+
+    try{
+      $tableschanged->save();
+    }catch(Exception $e){
+      $tableschanged = null ;
+
+      $message = " Teorema_Integration_Model_Service_TablesChangedTeorema : Error in update tableschanged  " . $e->getMessage() ;
+
+      $this->saveErrosLog($message, '0', 'tableschanged', $tableschanged->getLastIdUpdated(), $tableschanged->getId());
+
+      Mage::log($message, null, "update_stock_error.log");
+
+    }
+
+    return $tableschanged ;
+  }
+
+
 
 
 }

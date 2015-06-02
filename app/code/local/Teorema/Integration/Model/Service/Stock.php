@@ -20,11 +20,10 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
     Teorema_Integration_Model_Service_TablesChangedTeorema->updateTablesChangedTeorema
   */
   public function updateStock($arrayStatus, $idTableschanged){
-
-
-
       if(is_null($arrayStatus))
         $arrayStatus = array('pending');
+
+     $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
 
      $productService = Mage::getModel('teorema_integration/service_product') ;
 
@@ -39,17 +38,13 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
      $collection->addFieldToFilter('type', 'stock')->load();
 
-
-
      foreach ($collection as $key => $tableschanged)
      {
        //Otendo o sku do produto que foi alterado
        $sku = $tableschanged->getIdValue() ;
 
        #soma a quantidade de tentativas em atribuir o valor do estoque a este produto..
-       $tableschanged = $this->sumTableschanged($tableschanged);
-
-
+       $tableschanged = $tableschangedTeoremaService->sumTableschanged($tableschanged);
 
        if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() < $this->limit_attempts and !is_null($sku))
        {
@@ -75,7 +70,7 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
            $productMagento->save();
            $tableschanged->setStatus('processed');
-           $this->updateTablesChanged($tableschanged);
+           $tableschangedTeoremaService->updateTablesChanged($tableschanged);
          }catch(Exception $e){
 
            if(!is_null($productMagento) && !is_null($productMagento->getId()) )
@@ -84,11 +79,8 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
            $message = " Teorema_Integration_Model_Service_Stock :
                           Error in update product Id = $id " . $e->getMessage() ;
 
-
            $this->saveErrosLog($message, '0', 'stock', $tableschanged->getLastIdUpdated() , $tableschanged->getId());
 
-
-           Mage::log($message, null, "update_stock_error.log");
          }
 
 
@@ -96,10 +88,8 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
        #Em cado que a quantidade de tentativas supere o $this->limit_attempts então devemos trocar o status para Error
        else if(!is_null($tableschanged) and $tableschanged->getNumberOfRetries() >= $this->limit_attempts and !is_null($sku))
        {
-
          $tableschanged->setStatus('error');
-         $this->updateTablesChanged($tableschanged);
-
+         $tableschangedTeoremaService->updateTablesChanged($tableschanged);
        }
 
      }
@@ -122,6 +112,7 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
       /*TODO refactor*/
       if(!$product or is_null($product)){
         $product = $serviceProduct->createProductMagento($sku);
+        $product = Mage::getModel('catalog/product')->load($product->getId());
       }else{
         $product = Mage::getModel('catalog/product')->load($product->getId());
       }
@@ -132,41 +123,5 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
   }
 
-  #soma a quantidade de tentativas em atribuir o valor do estoque a este produto..
-  public function sumTableschanged($tableschanged){
-
-    if(is_null($tableschanged))
-      return null ;
-
-    #Verifica limite de tentativas para atualizar..
-    $tableschanged->setNumberOfRetries($tableschanged->getNumberOfRetries() + 1);
-
-
-    if($tableschanged->getNumberOfRetries() < ($this->limit_attempts + 1)){
-      $tableschanged->setStatus('processing');
-      $this->updateTablesChanged($tableschanged);
-    }
-
-    return $tableschanged ;
-
-  }
-
-  public function updateTablesChanged($tableschanged){
-
-    try{
-      $tableschanged->save();
-    }catch(Exception $e){
-      $tableschanged = null ;
-
-      $message = " Teorema_Integration_Model_Service_Stock : Error in update tableschanged  " . $e->getMessage() ;
-
-      $this->saveErrosLog($message, '0', 'tableschanged', $tableschanged->getLastIdUpdated(), $tableschanged->getId());
-
-      Mage::log($message, null, "update_stock_error.log");
-
-    }
-
-    return $tableschanged ;
-  }
 
 }
