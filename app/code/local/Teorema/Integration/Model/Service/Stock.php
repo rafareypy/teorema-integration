@@ -72,13 +72,17 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
                ));
 
          try{
+
            $productMagento->save();
            $tableschanged->setStatus('processed');
            $this->updateTablesChanged($tableschanged);
          }catch(Exception $e){
 
+           if(!is_null($productMagento) && !is_null($productMagento->getId()) )
+                $id = $productMagento->getId() ;
+
            $message = " Teorema_Integration_Model_Service_Stock :
-                          Error in update product  " . $e->getMessage() ;
+                          Error in update product Id = $id " . $e->getMessage() ;
 
 
            $this->saveErrosLog($message, '0', 'stock', $tableschanged->getLastIdUpdated() , $tableschanged->getId());

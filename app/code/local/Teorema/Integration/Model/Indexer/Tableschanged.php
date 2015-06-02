@@ -69,7 +69,17 @@ class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_I
        */
       public function reindexAll()
       {
-          $this->updateTablesChanged();
+
+        // initialize configuration and load event observers only from /crontab/ section
+        Mage::getConfig()->init()->loadEventObservers('crontab');
+
+        // initialize crontab event area
+        Mage::app()->addEventArea('crontab');
+
+        // dispatch 'default' event for observers specified in crontab configuration
+        Mage::dispatchEvent('default');
+
+       //$this->updateTablesChanged();
       }
 
 

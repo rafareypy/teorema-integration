@@ -113,4 +113,25 @@
           </updates>
       </layout>
     </adminhtml>
+        <crontab>
+            <jobs>
+                <teorema_integration_cron>
+                    <schedule>
+                        <cron_expr>*/1 * * * *</cron_expr>
+                    </schedule>
+                    <run>
+                        <model>teorema_integration/errors::log</model>
+                    </run>
+                </teorema_integration_cron>
+                <teorema_integration_teorema_cron_job>
+                    <run>
+                        <model>teorema_integration/cron::runTablesChanged</model>
+                    </run>
+                    <schedule>
+                        <cron_expr>*/1 * * * *</cron_expr>
+                    </schedule>
+                </teorema_integration_teorema_cron_job>
+
+            </jobs>
+        </crontab>
 </config>
