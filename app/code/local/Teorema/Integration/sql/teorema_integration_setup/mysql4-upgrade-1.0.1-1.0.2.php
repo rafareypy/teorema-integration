@@ -9,7 +9,7 @@ $installer->run("
 	  `tables_changed_id_teorema` int(11) unsigned NOT NULL,
     `id_tables_changed_magento` int(11) unsigned NOT NULL,
     `code` int(10) unsigned NOT NULL default '0',
-    `type`  ENUM('stock', 'product', 'order', 'customer'),
+    `type`  ENUM('stock', 'product', 'order', 'customer', 'other'),
     `message` varchar (255) default NULL,
     `created_at` DATETIME NOT NULL ,
     `updated_at` DATETIME NOT NULL ,
