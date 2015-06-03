@@ -199,7 +199,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     $productMagento->setPrice($price);
 
     $status = 1;
-    if($productJson->ITEMINATIVO == 'N' && $preco > 0){
+    if($productJson->ITEMINATIVO == 'N' && $preco < 0){
       $status = 1;
     }else{
       $status = 2;
@@ -483,7 +483,12 @@ public function saveInitial($initial){
    */
   public function saveProduct($productMagento){
     $productReturn = null ;
-    if(!is_null($productMagento)){
+
+    if(!$this->getStatusModule())
+      $this->setMessageModuleDisable();
+
+
+    if(!is_null($productMagento) && $this->getStatusModule() == true){
       try {
         $productMagento->save();
         $productReturn = $productMagento ;

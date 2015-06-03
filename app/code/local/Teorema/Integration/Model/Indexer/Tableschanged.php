@@ -72,15 +72,16 @@ class Teorema_Integration_Model_Indexer_Tableschanged extends Mage_Index_Model_I
         $this->updateTablesChanged();
       }
 
-
       #Busca valores desde tabelas alteradas no WebService Teorema e sincroniza com Magento
       public function updateTablesChanged()
       {
-
         $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
 
-        $tableschangedTeoremaService->updateTablesChangedTeorema();
-
+        if($tableschangedTeoremaService->getStatusModule()){
+          $tableschangedTeoremaService->updateTablesChangedTeorema();
+        }else{
+          Mage::getSingleton('adminhtml/session')->addWarning('Modulo Teorema Integração esta desativado.!');
+        }
       }
 
 

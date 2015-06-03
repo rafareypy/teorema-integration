@@ -19,7 +19,14 @@ Mage::app()->getStore();
 
 	$service = Mage::getModel('teorema_integration/service_product');
 
-	$service->initialCharge();
+	if($service->getStatusModule() ){
+		$service->initialCharge();
+	}else{
+		echo "<br>\n Modulo Teorema Integracao esta desativado.!<br>\n";
+	}
+
+
+
 
 	echo "\nTerminamos a execucao\n";
 

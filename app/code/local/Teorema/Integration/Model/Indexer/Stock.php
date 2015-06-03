@@ -81,13 +81,22 @@ class Teorema_Integration_Model_Indexer_Stock extends Mage_Index_Model_Indexer_A
         echo "<br/>\nReindexando dados do estoque dos produtos Magento\n<br/>";
 
 
+
           $serviceStock = Mage::getModel('teorema_integration/service_stock');
+
+
 
           echo "<br/>\nCarregado servico\n<br/>";
 
-          #Vai buscar dentro de tabelas alteradas todos os registros de estoque
-          #que esteja com status de processando ou pendente e vai atualizar valores
-          $serviceStock->updateStock(array('processing','pending'), null);
+
+          if($serviceStock->getStatusModule()){
+            #Vai buscar dentro de tabelas alteradas todos os registros de estoque
+            #que esteja com status de processando ou pendente e vai atualizar valores
+            $serviceStock->updateStock(array('processing','pending'), null);
+          }else{
+            Mage::getSingleton('adminhtml/session')->addWarning('Modulo Teorema Integração esta desativado.!');           
+          }
+
 
           echo "\n<br/> indexacao completada.! <br/>\n";
 

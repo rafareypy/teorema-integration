@@ -18,9 +18,15 @@ Mage::app()->getStore();
 
 	$service = Mage::getModel('teorema_integration/service_product');
 
-	$service->chargeSkusTeoremaToInitialModel();
+	if($service->getStatusModule() ){
+		$service->chargeSkusTeoremaToInitialModel();
+	}else{
+		echo "<br>\n Modulo Teorema Integracao esta desativado.!<br>\n";
+	}
 
-	echo "\nTerminamos a execução\n";
+
+
+	echo "\nTerminamos a execucao\n";
 
 
 ?>

@@ -22,58 +22,82 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
     protected $limit_load_products;
     protected $init_value_changed_tables;
     protected $update_customer ;
+    protected $product_status ;
+    protected $active ;
 
     /**
      *
      */
     function __construct() {
-        $this->soapVersion = SOAP_1_1;
-        $date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
-        $this->active = Mage::getStoreConfig("teorema/teorema_integration/active");
-        $this->date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
-        $this->user = Mage::getStoreConfig("teorema/teorema_integration/user");
-        $this->password = $date->format("Y-m-d") . 'T' . $date->format("H:i:s") . 'GMT-03:00HOV+01:00';
-        $this->password_config = Mage::getStoreConfig("teorema/teorema_integration/password");
-        $this->password_md5 = md5($this->password . strtoupper($this->password_config));
-        $this->soap_url_wsdl = Mage::getStoreConfig("teorema/teorema_integration/soap_url_wsdl");
-        $this->soap_domain = Mage::getStoreConfig("teorema/teorema_integration/soap_domain");
-        $this->soap_port = Mage::getStoreConfig("teorema/teorema_integration/soap_port");
-        $this->business_number = Mage::getStoreConfig("teorema/teorema_integration/business_number");
-        $this->moving_company = Mage::getStoreConfig("teorema/teorema_integration/moving_company");
-        $this->vendor_code = Mage::getStoreConfig("teorema/teorema_integration/vendor_code");
-        $this->limit_attempts = Mage::getStoreConfig("teorema/teorema_integration/limit_attempts");
-        $this->indexer_limit = Mage::getStoreConfig("teorema/teorema_integration/indexer_limit");
-        $this->cron_limit_search_webservice = Mage::getStoreConfig("teorema/teorema_integration/cron_limit_search_webservice");
-        $this->limit_load_products_sku = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products_sku");
-        $this->limit_load_products = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products");
-        $this->init_value_changed_tables = Mage::getStoreConfig("teorema/teorema_integration/init_value_changed_tables");
-        $this->update_customer = Mage::getStoreConfig("teorema/teorema_integration/update_customer");
+      $this->init();
+    }
 
-        if (is_null($this->limit_attempts))
-            $this->limit_attempts = 3;
+    public function init()
+    {
 
-        if (is_null($this->indexer_limit))
-            $this->indexer_limit = 30;
+      $this->soapVersion = SOAP_1_1;
+      $date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
+      $this->active = Mage::getStoreConfig("teorema/teorema_integration/active");
+      $this->date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
+      $this->user = Mage::getStoreConfig("teorema/teorema_integration/user");
+      $this->password = $date->format("Y-m-d") . 'T' . $date->format("H:i:s") . 'GMT-03:00HOV+01:00';
+      $this->password_config = Mage::getStoreConfig("teorema/teorema_integration/password");
+      $this->password_md5 = md5($this->password . strtoupper($this->password_config));
+      $this->soap_url_wsdl = Mage::getStoreConfig("teorema/teorema_integration/soap_url_wsdl");
+      $this->soap_domain = Mage::getStoreConfig("teorema/teorema_integration/soap_domain");
+      $this->soap_port = Mage::getStoreConfig("teorema/teorema_integration/soap_port");
+      $this->business_number = Mage::getStoreConfig("teorema/teorema_integration/business_number");
+      $this->moving_company = Mage::getStoreConfig("teorema/teorema_integration/moving_company");
+      $this->vendor_code = Mage::getStoreConfig("teorema/teorema_integration/vendor_code");
+      $this->limit_attempts = Mage::getStoreConfig("teorema/teorema_integration/limit_attempts");
+      $this->indexer_limit = Mage::getStoreConfig("teorema/teorema_integration/indexer_limit");
+      $this->cron_limit_search_webservice = Mage::getStoreConfig("teorema/teorema_integration/cron_limit_search_webservice");
+      $this->limit_load_products_sku = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products_sku");
+      $this->limit_load_products = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products");
+      $this->init_value_changed_tables = Mage::getStoreConfig("teorema/teorema_integration/init_value_changed_tables");
+      $this->update_customer = Mage::getStoreConfig("teorema/teorema_integration/update_customer");
+      $this->product_status = Mage::getStoreConfig("teorema/teorema_integration/product_status");
 
-        if (is_null($this->indexer_limit))
-            $this->indexer_limit = 80;
+      if (is_null($this->limit_attempts))
+          $this->limit_attempts = 3;
 
-        if (is_null($this->cron_limit_search_webservice))
-            $this->cron_limit_search_webservice = 50;
+      if (is_null($this->indexer_limit))
+          $this->indexer_limit = 30;
+
+      if (is_null($this->indexer_limit))
+          $this->indexer_limit = 80;
+
+      if (is_null($this->cron_limit_search_webservice))
+          $this->cron_limit_search_webservice = 50;
 
 
-        if (is_null($this->limit_load_products_sku))
-            $this->limit_load_products_sku = 500;
+      if (is_null($this->limit_load_products_sku))
+          $this->limit_load_products_sku = 500;
 
-        if (is_null($this->limit_load_products))
-            $this->limit_load_products = 2;
+      if (is_null($this->limit_load_products))
+          $this->limit_load_products = 2;
 
-        if (is_null($this->init_value_changed_tables))
-            $this->init_value_changed_tables = 999999999;
+      if (is_null($this->init_value_changed_tables))
+          $this->init_value_changed_tables = 999999999;
 
-        if (is_null($this->update_customer))
-            $this->update_customer = false ;
+      if (is_null($this->update_customer))
+          $this->update_customer = false ;
 
+
+    }
+
+    /*
+    * Função que retorna se o modulo esta ativo ou inativo
+    */
+    public function getStatusModule(){
+      return $this->active ;
+    }
+
+    /*
+    * Função para setar mensagem no magento cado o modulo esteja desativado
+    */
+    public function setMessageModuleDisable(){
+      Mage::getSingleton('adminhtml/session')->addWarning('Modulo Teorema Integração esta desativado');
     }
 
     /* TODO melhorar forma de teste com web service */
@@ -89,6 +113,11 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
     public function connectionGet($arrayParams = null) {
 
       $result = array('success' => false);
+      if(!$this->active){
+        $result = array('success' => false, 'message' => 'Modulo esta desativado', 'data'=> null);
+        $this->setMessageModuleDisable();
+        return $result ;
+      }
 
         try {
             $soapClient = new SoapClient(
@@ -124,10 +153,16 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
         }
 
         return $result;
-        
+
     }
 
     public function connectionPost($arrayParams = null) {
+
+      if(!$this->active){
+        $result = array('success' => false, 'message' => 'Modulo esta desativado', 'data'=> null);
+        $this->setMessageModuleDisable();
+        return $result ;
+      }
 
         $result = array('success' => false);
         try {
@@ -169,7 +204,6 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
         try {
 
-
             $errorsModel = Mage::getModel('teorema_integration/errors');
 
             $errorsModel->setTablesChangedIdTeorema($tablesChangedIdTeorema);
@@ -178,9 +212,10 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
             $errorsModel->setMessage($message);
             $errorsModel['id_tables_changed_magento'] = $idTablesChangedMagento;
 
+            if($this->active)
+              $errorsModel->save();
 
-            #verificar as variaveis se não vem como nulo e adicionanas do atualização do estoque
-            $errorsModel->save();
+
         } catch (Exception $e) {
             Mage::log("Error in save log Errors ", null, "service_log_errors.log");
         }
