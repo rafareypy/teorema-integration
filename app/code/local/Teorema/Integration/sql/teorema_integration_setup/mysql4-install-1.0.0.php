@@ -124,10 +124,7 @@ $setup->addAttribute('catalog_category', 'category_teorema',  array(
     'required'          => true,
     'user_defined'      => false,
     'default'           => 0,
-     'source' => 'eav/entity_attribute_source_table',
-        'option' => array(
-            'values' => array('Sim', 'Não'),
-        ),
+    'source' => 'eav/entity_attribute_source_boolean', 
 ));
  
  
