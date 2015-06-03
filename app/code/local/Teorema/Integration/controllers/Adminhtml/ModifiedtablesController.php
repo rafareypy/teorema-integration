@@ -31,8 +31,6 @@ class Teorema_Integration_Adminhtml_ModifiedtablesController extends Mage_Adminh
 
     public function newAction()
     {
-
-
         $this->_forward('edit');
     }
 
@@ -58,6 +56,9 @@ class Teorema_Integration_Adminhtml_ModifiedtablesController extends Mage_Adminh
 
 		}
 
+		/*
+			Função que processa dados de tabelas modificadas pelo id
+		*/
 		public function executeProcess($id){
 
 			if(!is_null($id))
@@ -75,11 +76,11 @@ class Teorema_Integration_Adminhtml_ModifiedtablesController extends Mage_Adminh
 						$serviceStock = Mage::getModel('teorema_integration/service_stock');
 						$serviceStock->updateStock(array('processing','pending'), $id);
 					case "product":
-
+						$serviceProduct = Mage::getModel('teorema_integration/service_product');
+						$serviceProduct->updateProductsToTablesChanged(array('processing','pending'), $id);
 				}
+
 			}
-
-
 
 		}
 
