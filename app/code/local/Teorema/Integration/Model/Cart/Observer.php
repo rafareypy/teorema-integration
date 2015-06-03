@@ -8,8 +8,12 @@ class Teorema_Integration_Model_Cart_Observer extends Mage_Core_Model_Abstract {
 
     /*TODO verificar */
     $qty = 0;
-    $availableBalance = Mage::getModel('teorema_integration/service_balance')
+    $result = Mage::getModel('teorema_integration/service_balance')
                                   ->availableBalance($product->getSku());
+
+    if($result['success'] && !empty($result['data']) )
+      $availableBalance = $result['data'];
+
 
     if($availableBalance){
       $qty = $availableBalance->ESTOQUEQUANTIDADEDISPONIVEL;

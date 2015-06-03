@@ -86,7 +86,8 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       $service = Mage::getModel('teorema_integration/service_customer');
 
-      //var_dump($service->getAllCustomersToTeorema());
+      //$data = $service->getAllCustomersToTeorema();
+      //var_dump($data['data']);
       //die();
 
       echo "<br/>Creating Customer<br/>";
@@ -190,13 +191,15 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
+
+
     public function newAction() {
 
-      die("teste ok");
+
 
 
       //$collection =  Mage::getModel('teorema_integration/errors')->getCollection();
-
+      /*
       $collection = Mage::getModel('teorema_integration/errors')->getCollection();
 
 
@@ -235,12 +238,18 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       //$this->testCategories();
 
+      */
+
+
+
       //test ok
       $service = Mage::getModel('teorema_integration/service_product');
 
-      //$test = $service->getAllGroupedProductToTeorema();
+      $test = $service->getAllProductsToTeorema() ;
 
-      //var_dump(json_encode( $service->getAllProductsToTeorema()));
+      $result = $service->getAllProductsToTeorema();
+
+      //var_dump(json_encode($result['data'] ));
 
       $service->initialCharge();
 
@@ -269,10 +278,11 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
       //test ok..
       //Verifica o estoque do produto
       //$test = $service->availableBalance('000004');
+      //$test = $test['data'];
 
       //Reserva o estoque do produto
       //$test = $service->reservedBalanceToProduct('000004');
-
+      //$test = $test['data'];
 
 
       //$service = Mage::getModel('teorema_integration/service_customer');
@@ -302,7 +312,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       $cont = 8 ;
 
-      foreach ($listProducts as $key => $p) {
+      foreach ($listProducts['data'] as $key => $p) {
 
         if($cont == 11){
           echo "<br/>sku = " . $p->ITEMREDUZIDO ;
@@ -310,6 +320,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
           $productJson =  $serviceProduct->getProductJsonToTeorema($p->ITEMREDUZIDO); //6745
 
+          $productJson = $productJson['data'];
 
           echo "<br/> ITEMDESCRICAO2 : " . $productJson->ITEMDESCRICAO2;
           echo "<br/> FAMILIA : " . $productJson->FAMILIA;

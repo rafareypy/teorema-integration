@@ -24,7 +24,7 @@ class Teorema_Integration_Model_Service_Balance extends Teorema_Integration_Mode
       'SENHA_REF' => $this->password,
     );
 
-    return $this->connectionGet($params);
+    return  $this->connectionPost($params);
 
   }
 
@@ -45,24 +45,7 @@ class Teorema_Integration_Model_Service_Balance extends Teorema_Integration_Mode
       'SENHA_REF' => $this->password
     );
 
-    return $this->connectionGet($params);
-
-  }
-
-  /*Retorna todos os clientes desde o Web Service Teorema*/
-  public function getCustomerToTeorema($code = null){
-
-    //Senha sera adicionaod depois on metodo connectionGet
-    $param = array(
-    			'USUARIO'    => $this->user,
-    			'METODO'     => 'ecomClienteConsulta',
-    			'CLIFORCODIGO' => $code,
-    			'SENHA_REF'  => $this->password,
-    			'SENHA'      => "" ,
-    			'EMPRESACODIGO' => $this->business_number,
-    		);
-
-    return $this->connectionGet($param);
+    return  $this->connectionGet($params);
 
   }
 

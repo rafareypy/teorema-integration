@@ -16,7 +16,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
   public function getProductsToTeorema(){
 
     //Senha sera adicionaod depois on metodo connectionGet
-    $p = array(
+    $params = array(
       'USUARIO' 	=> $this->user,
       'METODO' 	  => 'ecomItemTodosConsulta',
       'SENHA'     => "",
@@ -24,9 +24,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       'SENHA_REF' => $this->password
     );
 
-    $result = $this->connectionGet($p);
-
-    return $result ;
+    return $this->connectionGet($params);
 
   }
 
@@ -45,7 +43,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       'ITEMREDUZIDO' => $sku
     );
 
-    return $this->connectionGet($params);
+    return  $this->connectionGet($params);
 
   }
 
@@ -62,7 +60,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       'EMPRESACODIGO' => '0001',
       'ITEMSISTEMA' => 'T'
     );
-
 
     return $this->connectionGet($params);
 
@@ -81,7 +78,8 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 			'EMPRESACODIGO' => '0001'
 		);
 
-		return $this->connectionGet($params);
+    return  $this->connectionGet($params);
+
 	}
 
 
@@ -94,7 +92,9 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     			'EMPRESACODIGO' => '0001',
     			'ITEMREDUZIDO' => $sku
     		);
+
     return $this->connectionGet($params);
+
   }
 
 
@@ -109,12 +109,19 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     }else{
         echo "<br/>\nCreating product\n<br/>";
         #Se o produto não existe, então sera buscado o Json do mesmo no webService da Teorema..
-        $productTeorema = $this->getProductJsonToTeorema($sku);
+        $result = $this->getProductJsonToTeorema($sku);
 
-        #Obtendo um novo produto Magento
-        $product     = $this->getNewProductMagentoToJson($productTeorema);
+        if($result['success'] && !empty($result['data']) ){
+            $productTeorema = $result['data'];
+            #Obtendo um novo produto Magento
+            $product     = $this->getNewProductMagentoToJson($productTeorema);
 
-        $product = $this->saveProduct($product);
+            $product = $this->saveProduct($product);
+        }else{
+          Mage::getSingleton(‘core/session’)->addError('Erro ao tentar criar um produto Magento <br/>' . $result['message'] );
+          $this->saveErrosLog($result['message'], '0', 'product', 0, 0) ;
+        }
+
     }
 
     return $product ;
@@ -127,7 +134,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     Recebe como parametro o objeto json Teorema webService
   */
   public function getNewProductMagentoToJson($productJson, $productMagentoUpdate){
-
 
     $category = array(1, 3);
 
@@ -196,8 +202,8 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     $availableBalance = Mage::getModel('teorema_integration/service_balance')
                                   ->availableBalance($productJson->ITEMREDUZIDO);
 
-    if($availableBalance){
-      $qty = $availableBalance->ESTOQUEQUANTIDADEDISPONIVEL;
+    if($availableBalance['success'] && !empty($availableBalance['data'])){
+      $qty = $availableBalance['data']->ESTOQUEQUANTIDADEDISPONIVEL;
     }
 
 
@@ -262,8 +268,9 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
     $cont = 45 ;
 
-    foreach ($resultSearch as $key => $productTeorema) {
+    if($resultSearch['success']  && !empty($resultSearch['data']))
 
+    foreach ($resultSearch['data'] as $key => $productTeorema) {
 
       if($cont <= 60){
         echo "<br/> $cont sku = " . $productTeorema->ITEMREDUZIDO . "<br/>" ;
@@ -271,18 +278,11 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
         $this->createProductMagento($productTeorema->ITEMREDUZIDO); //6745
       }
 
-
-
       $cont++ ;
 
     }
 
-
-
-
   }
-
-
 
 
   /*
@@ -295,6 +295,15 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     $arrayProductsSku = $this->getAllProductsToTeorema();
 
     echo "<br/> \n Ja temos array com valores\n";
+
+    if($arrayProductsSku['success'] && !empty($arrayProductsSku['data']) ){
+      $arrayProductsSku = $arrayProductsSku['data'];
+    }else{
+      $message = $arrayProductsSku['success']  ? "Não foi encontrados produtos (ITEMREDUZIDO) na consulta Web Service teorema" : "Ocorreu um erro ao fazer a busca no Web service (buscando ITEMREDUZIDO)" ;
+      echo $message ;
+      $this->saveErrosLog($message, '0', 'product','0', '0');
+      exit;
+    }
 
     $i = 0 ;
 
@@ -317,7 +326,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
         }
       }else{
         echo "<br/> \n Finalizado por configurações do modulo.! ";
-        $break ;
+        break ;
       }
       $i++;
     }
@@ -331,7 +340,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
   public function initialCharge(){
 
     //$this->chargeSkusTeoremaToInitialModel();
-
 
       $collection =  Mage::getModel('teorema_integration/initial')->getCollection();
       $collection->addFieldToFilter('status', 'pending')->setPageSize($this->limit_load_products);
@@ -362,29 +370,25 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
         $this->saveInitial($initial);
 
-        if($i >= $this->limit_load_products)
+        if($i >= $this->limit_load_products){
+          echo "<br> \n Processo parado por limite indicado na configuracao do usuario.!";
           break ;
+        }
 
-         $i++ ;
+        $i++ ;
 
       }
-
 
   }
 
 public function saveInitial($initial){
-
-
   if(!is_null($initial)){
-
     try{
       $initial->save();
     }catch(Exception $e){
       echo "erro ao salvar " . $e->getMessage();
     }
-
   }
-
 }
 
   /*
@@ -422,18 +426,26 @@ public function saveInitial($initial){
                $product = $this->createProductMagento($sku);
              }else{
                echo "<br/> \n Indexer updating product  $sku";
-
                $product = $this->getProductOrCreateMagento($sku);
 
                #produto existe, então sera buscado o Json do mesmo no webService da Teorema..
-               $productTeorema = $this->getProductJsonToTeorema($sku);
+               $result = $this->getProductJsonToTeorema($sku);
+               $productTeorema = null ;
+               if($result['success'] && !empty($result['data'])){
+                 $productTeorema = $result['data'] ;
 
-               #Obtendo um novo produto Magento com os valores atualizados do web service teorema
-               $productUpdated   = $this->getNewProductMagentoToJson($productTeorema, $product);
+                 #Obtendo um novo produto Magento com os valores atualizados do web service teorema
+                 $productUpdated   = $this->getNewProductMagentoToJson($productTeorema, $product);
 
-               $product  = $this->saveProduct($productUpdated);
+                 $product  = $this->saveProduct($productUpdated);
+                 echo "<br/> \n Produto atualizado. <br/> \n";
+               }else{
+                  $product = null ;
+                  $message = !empty($result['message']) ? $result['message'] : "";
+                  Mage::getSingleton('core/session')->addError($message);
+                  $this->saveErrosLog("Error in update product (updateProductsToTablesChanged) " . $message , '0', 'product', $tableschanged->getLastIdUpdated(), $tableschanged->getId()) ;
+               }
 
-               echo "<br/> \n Produto atualizado. <br/> \n";
              }
 
              if(!is_null($product) && !is_null($product->getId())){
@@ -451,10 +463,7 @@ public function saveInitial($initial){
 
   }
 
-
-
   public function saveProduct($productMagento){
-
     $productReturn = null ;
     if(!is_null($productMagento)){
       try {
@@ -464,6 +473,7 @@ public function saveInitial($initial){
         $message = "\nError in save Product\n " . $e->getMessage();
         Mage::log($message, null, 'teorema_insert_error.log');
         echo "<br/> \n " . $message ;
+        Mage::getSingleton('core/session')->addError('Erro ao salvar o produto <br/>'. $message );
         $this->saveErrosLog($message , '0', 'product', 0, 0);
       }
     }
@@ -474,9 +484,7 @@ public function saveInitial($initial){
     Função responsavel por buscar o produto dentro do Magento, caso o mesmo não exista sera criado..
   */
   public function getProductOrCreateMagento($sku){
-
     $product = null ;
-
     if(!is_null($sku)){
       $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
       /*TODO refactor*/
@@ -488,7 +496,5 @@ public function saveInitial($initial){
     }
     return $product ;
   }
-
-
 
 }

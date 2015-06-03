@@ -180,7 +180,7 @@
 
 
                       <limit_load_products translate="label">
-                          <label>Quantidade limite Carga inicial de produtos </label>
+                          <label>Quantidade limite Carga inicial (interna) de produtos </label>
                           <comment>Ex.:70 </comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>170</sort_order>
@@ -188,7 +188,7 @@
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </limit_load_products>
-                      
+
                       <init_value_changed_tables translate="label">
                           <label>Valor inicial do identificador(ID) da tabelas alteradas</label>
                           <comment>Ex.:1 - (usado somente após primeira carga de produtos)</comment>

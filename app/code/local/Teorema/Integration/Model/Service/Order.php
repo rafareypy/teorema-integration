@@ -19,7 +19,10 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
 
     $service = Mage::getModel('teorema_integration/service_customer');
 
-    //$customers = $service->getAllCustomersToTeorema() ;
+    //$result = $service->getAllCustomersToTeorema() ;
+
+    //if($restult['success'] && !empty($result['data']))
+    //  $customers  = $result['data'];
 
     #fazendo teste com outro codigo de cliente, que esta no teorema, porem não foi cadastrado pelo modulo de integração
     $cliforcodigo = "0002513" ;
@@ -117,11 +120,13 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
       //vendaDataPrevistaEntrega
       //vendaNumeroRequisicao
 
+      echo "Falta verificar se esta tudo ok, depois de refatorado o retorno";
 
-      $value = $this->connectionGet($params);
+      $dataResult = $this->connectionPost($params);
 
-      var_dump($value);
-      die();
+      return $dataResult['data'];
+
+
   }
 
 

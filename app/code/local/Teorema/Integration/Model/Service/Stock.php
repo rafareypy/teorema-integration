@@ -53,8 +53,12 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
          $availableBalance = $serviceBalance->availableBalance($sku);
 
          $qty = 0 ;
-         if($availableBalance){
-           $qty = $availableBalance->ESTOQUEQUANTIDADEDISPONIVEL;
+         if($availableBalance['success'] &&  !empty($availableBalance['data']) ){
+           $qty = $availableBalance['data']->ESTOQUEQUANTIDADEDISPONIVEL;
+         }elseif(!$availableBalance['success']){
+           $message = " Observação não foi possivel consultar o estoque do produto W.S. :" .$e->getMessage() ;
+           Mage::getSingleton('adminhtml/session')->addWarning($message);
+           $this->saveErrosLog($message, '0', 'stock', $tableschanged->getLastIdUpdated() , $tableschanged->getId());
          }
 
          #Obtendo o produto Magento desde o sku..
@@ -78,11 +82,10 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
            $message = " Teorema_Integration_Model_Service_Stock :
                           Error in update product Id = $id " . $e->getMessage() ;
+           Mage::getSingleton('core/session')->addError($message);                 
 
            $this->saveErrosLog($message, '0', 'stock', $tableschanged->getLastIdUpdated() , $tableschanged->getId());
-
          }
-
 
        }
        #Em cado que a quantidade de tentativas supere o $this->limit_attempts então devemos trocar o status para Error
@@ -104,7 +107,6 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
     $product = null ;
 
     if(!is_null($sku)){
-
       $product = Mage::getModel('catalog/product')->loadByAttribute('sku', $sku);
 
       $serviceProduct = Mage::getModel('teorema_integration/service_product');
@@ -118,9 +120,7 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
       }
 
     }
-
     return $product ;
-
   }
 
 

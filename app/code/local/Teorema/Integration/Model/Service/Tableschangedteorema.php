@@ -18,7 +18,7 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
     if( is_null($idmax) )
       $idmax = 30 ;
 
-    $p = array(
+      $params = array(
       'USUARIO'   => $this->user,
       'METODO'    => 'ecomTabelasAlteradas',
       'IDINI'     => $idMini,
@@ -29,7 +29,8 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
 
     );
 
-    return $this->connectionPost($p);
+    return $this->connectionGet($params);
+
 
   }
 
@@ -56,7 +57,7 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
     $tablesTeoremaChangedList = $this->getTablesChanged($idMini , $this->cron_limit_search_webservice, null);
 
     if($tablesTeoremaChangedList['success'] && !empty($tablesTeoremaChangedList['data'])){
-        foreach ($tablesTeoremaChangedList as $key => $table)
+        foreach ($tablesTeoremaChangedList['data'] as $key => $table)
         {
 
             $type = 'other';
@@ -117,6 +118,9 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
 
             $tableschanged->save();
         }
+    }else if(!$tablesTeoremaChangedList['success']){
+      Mage::getSingleton('adminhtml/session')->addWarning('Erro ao consultar valores de tabelas alteradas <br> ' .$tablesTeoremaChangedList['message'] ); 
+      $this->saveErrosLog("Error in update tables changed " .$tablesTeoremaChangedList['message'] , '0', 'tableschanged', '0', '0') ;
     }
   }
 

@@ -65,10 +65,10 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
         if (is_null($this->limit_load_products))
             $this->limit_load_products = 2;
-        
+
         if (is_null($this->init_value_changed_tables))
             $this->init_value_changed_tables = 999999999;
-        
+
     }
 
     /* TODO melhorar forma de teste com web service */
@@ -83,8 +83,8 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
      */
     public function connectionGet($arrayParams = null) {
 
-        $result = array('code' => 'error', 'message' => "error");
-        
+      $result = array('success' => false);
+
         try {
             $soapClient = new SoapClient(
                     $this->soap_url_wsdl, array('cache_wsdl' => WSDL_CACHE_NONE, 'encoding' => 'UTF-8', 'soap_version' => $this->soapVersion));
@@ -96,27 +96,28 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
             $response = $soapClient->send(array('arg0' => $parameters));
 
+            $data = json_decode($response->return);
+            if (isset($data->RESULT)) {
+                $result['data'] = $data->RESULT;
+                $result['success'] = true;
+            } else {
+                $result['data'] = $data;
+                $result['success'] = true;
+            }
 
-            $result = json_decode($response->return);
         } catch (Exception $e) {
 
-            /* TODO refatorar */
-            echo "<br/>error when trying to access service.!<br/>";
-            echo "Error<br/>";
+          $result['message'] = $e->getMessage();
+          $result['data'] = array();
 
-            var_dump($e);
+          /* TODO refatorar */
+          echo "<br/>error when trying to access service.!<br/>";
+          echo "Error<br/>";
 
-            $result['message'] = $e->getMessage();
-            Mage::log($e->getMessage(), null, 'teorema_integration.log');
         }
 
-        /* TODO verificar retorno, quando der problemas ao fazer uma busca.. */
+        return $result;
 
-        if (isset($result->RESULT)) {
-            return $result->RESULT;
-        } else {
-            return $result;
-        }
     }
 
     public function connectionPost($arrayParams = null) {

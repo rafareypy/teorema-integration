@@ -11,7 +11,7 @@ Mage::app()->getStore();
 //integration_initial_charge_product
 
 
-	echo "\n Este script tem a função de criar todos os produtos da tabela teorema_integration_initial   \n";
+	echo "\n Este script tem a funcao de criar todos os produtos da tabela teorema_integration_initial   \n";
 	echo "\n para o Magento   \n";
 
 	echo "\n Vamos iniciar a carga de produtos..  \n";
@@ -21,7 +21,7 @@ Mage::app()->getStore();
 
 	$service->initialCharge();
 
-	echo "\nTerminamos a execução\n";
+	echo "\nTerminamos a execucao\n";
 
 
 ?>

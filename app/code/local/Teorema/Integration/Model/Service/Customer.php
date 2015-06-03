@@ -6,11 +6,11 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
       parent::__construct();
   }
 
-  /*Retorna todos os clientes desde o Web Service Teorema*/
-  public function getCustomerToTeorema($code = null){
+  /*Retorna clientes desde o Web Service Teorema*/
+  public function getCustomerToTeorema($code ){
 
     //Senha sera adicionaod depois on metodo connectionGet
-    $param = array(
+    $params = array(
     			'USUARIO'    => $this->user,
     			'METODO'     => 'ecomClienteConsulta',
     			'CLIFORCODIGO' => $code,
@@ -19,9 +19,7 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
     			'EMPRESACODIGO' => $this->business_number,
     		);
 
-    $result = $this->connectionGet($param);
-
-    return $result ;
+    return  $this->connectionGet($params);
 
   }
 
@@ -36,6 +34,7 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
     		);
 
     return $this->connectionGet($params);
+
   }
 
   /*
@@ -85,7 +84,11 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
             );
 
 
-            $result = $this->connectionGet($params);
+            $result = $this->connectionPost($params);
+
+            $result = $result['data'];
+
+            die("Falta refatorar criação de clientes no w.s. teorema");
 
             #Obtemos o codigo do cliente desde teorema e adicionamos ao cliente Magento
             if(isset($result->CODIGO)){
