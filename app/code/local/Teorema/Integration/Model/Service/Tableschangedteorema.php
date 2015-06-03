@@ -6,11 +6,14 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
       parent::__construct();
   }
 
-
-  /*
-    Obtem todos os dados de tabelas alteradas no web service Teorema
-  */
-  public function getTablesChanged($idMini , $idmax , $value = null){
+  /**
+   * Função que busca todos os dados de tabelas alteradas no web service Teorema
+   * @param $idMini id inicial para a busca dentro do w.s.
+   * @param $idmax id maximo para busca no w.s.
+   * @param $idMini id inicial para a busca dentro do w.s.
+   * @return JSON ecomTabelasAlteradas
+   */
+  public function getTablesChanged($idMini , $idmax , $value ){
 
     if( is_null($idMini) )
       $idMini = 1 ;
@@ -34,10 +37,11 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
 
   }
 
-  /*
-    Função  que sincroniza tabelas modificadas do Web service teorema
-    com o Magento..
-  */
+  /**
+   * Função  que sincroniza tabelas modificadas do Web service teorema
+   * com Magento
+   * @return JSON ecomTabelasAlteradas
+   */
   public function updateTablesChangedTeorema(){
 
     $tablesMagentochanged = Mage::getResourceModel('teorema_integration/tableschanged_collection')
@@ -119,13 +123,18 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
             $tableschanged->save();
         }
     }else if(!$tablesTeoremaChangedList['success']){
-      Mage::getSingleton('adminhtml/session')->addWarning('Erro ao consultar valores de tabelas alteradas <br> ' .$tablesTeoremaChangedList['message'] ); 
+      Mage::getSingleton('adminhtml/session')->addWarning('Erro ao consultar valores de tabelas alteradas <br> ' .$tablesTeoremaChangedList['message'] );
       $this->saveErrosLog("Error in update tables changed " .$tablesTeoremaChangedList['message'] , '0', 'tableschanged', '0', '0') ;
     }
   }
 
 
 
+  /**
+   * Função  soma a quantidade de tentativas de execução dos registros em tabelas alteradas
+   * @param $tableschanged registro de tabela alterada a ser somado NumberOfRetries
+   * @return $tableschanged
+   */
     public function sumTableschanged($tableschanged){
 
       if(is_null($tableschanged))
@@ -144,7 +153,11 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
 
     }
 
-
+    /**
+     * Função  soma a quantidade de tentativas de execução dos registros em tabelas alteradas
+     * @param $tableschanged registro de tabela alterada a ser atualizado
+     * @return $tableschanged
+     */
     public function updateTablesChanged($tableschanged){
 
       try{

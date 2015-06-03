@@ -1,0 +1,33 @@
+[
+    {
+        "TABELA": "Item",
+        "ID": 51,
+        "ITEMREDUZIDO": "003340",
+        "EMPRESACODIGO": "0001"
+    },
+    {
+        "TABELA": "ItemEstoque",
+        "ID": 52,
+        "EMPRESAITEM": "0001",
+        "ITEMREDUZIDO": "003340",
+        "EMPRESAMOVIMENTO": "0001"
+    },
+    {
+        "PLANOPRECOSEQUENCIA": 42148,
+        "TABELA": "ItemPlanoPrecoMovimento",
+        "ID": 53
+    },
+    {
+        "TABELA": "Item",
+        "ID": 54,
+        "ITEMREDUZIDO": "006188",
+        "EMPRESACODIGO": "0001"
+    },
+    {
+        "TABELA": "ItemEstoque",
+        "ID": 55,
+        "EMPRESAITEM": "0001",
+        "ITEMREDUZIDO": "006188",
+        "EMPRESAMOVIMENTO": "0001"
+    }
+]

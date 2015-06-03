@@ -86,8 +86,8 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       $service = Mage::getModel('teorema_integration/service_customer');
 
-      //$data = $service->getAllCustomersToTeorema();
-      //var_dump($data['data']);
+      $data = $service->getAllCustomersToTeorema();
+      var_dump( json_encode($data['data']) );
 
       //die("<br/> processo terminado");
 
@@ -186,6 +186,17 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     public function newActionProduct() {
 
 
+      $service = Mage::getModel('teorema_integration/service_product');
+
+    	//$restult = $service->getAllProductsToTeorema();
+
+      $result = $service->getProductJsonToTeorema('006751');
+
+
+      var_dump( json_encode($result['data']) );
+
+
+      die("testes relaionados a produto");
 
 
       try{

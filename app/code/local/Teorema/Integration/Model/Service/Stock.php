@@ -14,11 +14,13 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
   */
 
-  /*
-    Função que atualiza o estoque no Magento com relação a tabelas alteradas
-    que ja foram carregadas em outr processo
-    Teorema_Integration_Model_Service_TablesChangedTeorema->updateTablesChangedTeorema
-  */
+
+  /**
+   * Função que atualiza o estoque no Magento com relação a tabelas alteradas
+   * que ja foram carregadas em outr processo
+   * @param $arrayStatus status do filtro na busca
+   * @param $idTableschanged status do filtro na busca
+   */
   public function updateStock($arrayStatus, $idTableschanged){
       if(is_null($arrayStatus))
         $arrayStatus = array('pending');
@@ -82,7 +84,7 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
            $message = " Teorema_Integration_Model_Service_Stock :
                           Error in update product Id = $id " . $e->getMessage() ;
-           Mage::getSingleton('core/session')->addError($message);                 
+           Mage::getSingleton('core/session')->addError($message);
 
            $this->saveErrosLog($message, '0', 'stock', $tableschanged->getLastIdUpdated() , $tableschanged->getId());
          }
@@ -99,9 +101,11 @@ class Teorema_Integration_Model_Service_Stock extends Teorema_Integration_Model_
 
   }
 
-  /*
-    Função responsavel por buscar o produto dentro do Magento, caso o mesmo não exista sera criado..
-  */
+  /**
+   * Função que busca o produto no Magento
+   * @param $sku sku do produto
+   * @return produto Magento
+   */
   public function getProductMagento($sku){
 
     $product = null ;

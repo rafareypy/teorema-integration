@@ -6,7 +6,12 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
       parent::__construct();
   }
 
-  /*Retorna clientes desde o Web Service Teorema*/
+
+  /**
+   * Retorna clientes desde o Web Service Teorema
+   * @param $code codigo do cliente a ser buscado
+   * @return JSON cliente Teorema
+   */
   public function getCustomerToTeorema($code ){
 
     //Senha sera adicionaod depois on metodo connectionGet
@@ -23,6 +28,10 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
 
   }
 
+  /**
+   * Retorna todos clientes desde o Web Service Teorema
+   * @return JSON lista cliente teorema ecomClienteTodosConsulta [{"CLIFORCODIGO":"0000001"},{"CLIFORCODIGO":"0000002"},{"CLIFORCODIGO":"0000003"}]
+   */
   public function getAllCustomersToTeorema(){
 
     $params = array(
@@ -37,9 +46,12 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
 
   }
 
-  /*
-    Função que cria um cliente Magento para o webService teorema (ecomClienteAltera)
-  */
+
+  /**
+   * Função que cria um cliente Magento para o webService teorema (ecomClienteAltera)
+   * @param $customer Cliente Magento
+   * @return Customer Magento com o codigo teorema (TeoremaCode)
+   */
   public function createCustomerMagentoToTeorema($customer){
 
     /*TODO refactor
@@ -87,9 +99,12 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
   }
 
 
-  /*
-    Função que 'monta' array com parametros para que possa ser inserido no w.s. teorema
-  */
+
+  /**
+   * Função que 'monta' array com parametros para que possa ser inserido no w.s. teorema
+   * @param $customerObj Cliente Magento
+   * @return $params array com valores para inserir cliente no w.s. teorema
+   */
   public function getParamsCreateCustomerTeoremaToMagento($customerObj)
   {
 
@@ -117,7 +132,7 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
             'CLIFORFISICOJURIDICO' => $cliforfisicojuridico,
             'CLIFORENDERECO' => $billingAddress['street'],
             'CLIFORDOCUMENTO' => $customerObj['taxvat'],
-            'CLIFORBAIRRO' => $neighborhood, 
+            'CLIFORBAIRRO' => $neighborhood,
             'EMPRESACODIGO' => $this->business_number,
             'MUNICIPIOCODIGOIBGE' => 09401,
             'CLIFORCEP' => $billingAddress['postcode'],

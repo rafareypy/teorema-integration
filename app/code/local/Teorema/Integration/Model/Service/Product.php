@@ -12,7 +12,10 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 # agrupado é usando 1 atributo
 # e configurável é usando 1 ou mais atributos
 
-  /*Retorna todos os produtos desde o Web Service Teorema*/
+  /**
+	 * Função Retorna todos os produtos desde o Web Service Teorema
+	 * @return JSON products
+	 */
   public function getProductsToTeorema(){
 
     //Senha sera adicionaod depois on metodo connectionGet
@@ -28,10 +31,12 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
   }
 
-  /*
-    Metodo que busca um determinado produto no Web Service Teorema
-    $sku = ITEMREDUZIDO
-  */
+
+  /**
+	 * Função que busca um determinado produto no Web Service Teorema
+   * @param $sku = ITEMREDUZIDO
+	 * @return JSON product Model1Product
+	 */
   public function getProductJsonToTeorema($sku){
 
     $params = array(
@@ -43,13 +48,14 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       'ITEMREDUZIDO' => $sku
     );
 
-    return  $this->connectionGet($params);
+    return $this->connectionGet($params);
 
   }
 
-  /*
-    Traz todos os codigos 'ITEMREDUZIDO' do webservice Teorema
-  */
+  /**
+	 * Função Traz todos os codigos 'ITEMREDUZIDO' do webservice Teorema
+	 * @return JSON products [{"ITEMREDUZIDO":"006733"},{"ITEMREDUZIDO":"006735"}]
+	 */
   public function getAllProductsToTeorema(){
 
     $params = array(
@@ -65,10 +71,10 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
   }
 
-
-  /*
-    Web service (ecomItemTodosGrade) Teorema que retorna toda a grade de produtos
-  */
+  /**
+	 * Web service (ecomItemTodosGrade) Teorema que retorna toda a grade de produtos
+	 * @return JSON products
+	 */
   public function getAllGroupedProductToTeorema(){
     $params = array(
 			'USUARIO'  => $this->user,
@@ -98,6 +104,12 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
   }
 
 
+  /**
+	 * Cria produto Teorema no Magento  desde o sku (ITEMREDUZIDO)
+   * Metodo ira buscar no w.s. teorema o produto
+   * @param sku
+	 * @return product Magento
+	 */
   public function createProductMagento($sku)
   {
     #Verifica se o produto existe
@@ -127,12 +139,14 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     return $product ;
   }
 
-
-
-  /*
-    Função responsavel por criar produto Magento
-    Recebe como parametro o objeto json Teorema webService
-  */
+  /**
+	 * Função responsavel por criar produto Magento
+   * Recebe como parametro o objeto json Teorema webService
+   * @param $productJson produto teorema JSON
+   * @param $productMagentoUpdate recebendo este parametro a função ira atualizar o produto,
+   *        com parametros do $productJson
+	 * @return product Magento
+	 */
   public function getNewProductMagentoToJson($productJson, $productMagentoUpdate){
 
     $category = array(1, 3);
@@ -246,20 +260,15 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
     }
 
-
-    echo "<br/>Product sku = " . $productMagento->getSku();
-    echo "<br/>Product Description = " . $productMagento->getName();
-
-
     return $productMagento ;
 
   }
 
-  /*
-    Função que traz todos os produtos do web service Teorema e adiciona no Magento
-    os produtos que ja existem apenas atualiza
-  */
-  /*TODO verificar se esta função tbm ira atualizar o estoque dos produtos*/
+
+  /**
+	 * Função que traz todos os produtos do web service Teorema e adiciona no Magento
+   * os produtos que ja existem apenas atualiza
+	 */
   public function updateAllProductsTeoremaToMagento(){
 
     /*TODO verificar se o resultado da consulta não sera guardado no banco para uma posteriror carga 'aos poucos'*/
@@ -285,9 +294,10 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
   }
 
 
-  /*
-    Traz todos os skus (ITEMREDUZIDO) do web service teorema e insere na tabela teorema_integration_initial
-  */
+  /**
+   * Função que Traz todos os skus (ITEMREDUZIDO) do web service teorema e insere na tabela teorema_integration_initial
+   * utilizado para a carga inicial
+   */
   public function chargeSkusTeoremaToInitialModel(){
 
     echo "<br> \n Carregando todos os valores de ITEMREDUZIDO para o teorema_initial \n";
@@ -333,9 +343,9 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
   }
 
-  /*
-    Função para dar carga inicial dos produtos no magento
-    Busca todos os skus com status pending e cria
+  /**
+  *  Função para dar carga inicial dos produtos no magento
+  *  Busca todos os skus com status pending e cria
   */
   public function initialCharge(){
 
@@ -381,6 +391,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
   }
 
+
 public function saveInitial($initial){
   if(!is_null($initial)){
     try{
@@ -391,9 +402,11 @@ public function saveInitial($initial){
   }
 }
 
-  /*
-    Função responsavel por atualizar ou criar produtos no Magento, que esteja em tabelas alteradas
-  */
+  /**
+   * Função responsavel por atualizar ou criar produtos no Magento, que esteja em tabelas alteradas
+   * @param $arrayStatus() status do filtro da busca em tableschanged
+   * @param $idTableschanged (id tabela modificada) opcional, em caso seja passado sera ul filtro para a busca
+   */
   public function updateProductsToTablesChanged($arrayStatus, $idTableschanged ){
 
     if(is_null($arrayStatus))
@@ -463,6 +476,11 @@ public function saveInitial($initial){
 
   }
 
+  /**
+   * Função responsavel por salvar um produto no Magento
+   * @param $productMagento produto do tipo magento
+   * @return $productMagento
+   */
   public function saveProduct($productMagento){
     $productReturn = null ;
     if(!is_null($productMagento)){
@@ -480,9 +498,12 @@ public function saveInitial($initial){
     return $productReturn ;
   }
 
-  /*
-    Função responsavel por buscar o produto dentro do Magento, caso o mesmo não exista sera criado..
-  */
+
+  /**
+   * Função responsavel por buscar o produto dentro do Magento, caso o mesmo não exista sera criado..
+   * @param $sku do produto
+   * @return $productMagento Produto do Magento
+   */
   public function getProductOrCreateMagento($sku){
     $product = null ;
     if(!is_null($sku)){

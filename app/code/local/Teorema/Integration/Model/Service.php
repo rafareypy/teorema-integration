@@ -102,6 +102,8 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
             $response = $soapClient->send(array('arg0' => $parameters));
 
             $data = json_decode($response->return);
+
+
             if (isset($data->RESULT)) {
                 $result['data'] = $data->RESULT;
                 $result['success'] = true;
@@ -122,7 +124,7 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
         }
 
         return $result;
-
+        
     }
 
     public function connectionPost($arrayParams = null) {
