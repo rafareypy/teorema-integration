@@ -80,15 +80,16 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     /*
       Testes relacionados a clientes
     */
-    public function newActionCustomer() {
+    public function newAction() {
 
-      //echo "buscando clientes";
+      echo "testes relacionados a clientes <br/>";
 
       $service = Mage::getModel('teorema_integration/service_customer');
 
       //$data = $service->getAllCustomersToTeorema();
       //var_dump($data['data']);
-      //die();
+
+      //die("<br/> processo terminado");
 
       echo "<br/>Creating Customer<br/>";
 
@@ -110,28 +111,17 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
         foreach ($collection as $customer)
         {
 
-            if($customer->getId() == 147){
-                $result = $service->createCustomerToTeorema($customer) ;
+            if($customer->getId() == 150){
 
+                //die("encontramos o cliente de codigo 148");
+                $result = $service->createCustomerMagentoToTeorema($customer) ;
 
-                if(isset($result->CODIGO)){
-                  if($result->CODIGO == 0){
-                    echo "<br/>Customer " . $result->FIELDS->CLIFORNOME . " saved " ;
-
-                      try{
-                        //include code teorema in customer Magento
-
-                      }catch(Exception $e){
-                        echo "error in save customer to Magento <br/> " . $e->getMessage();
-                      }
-
-                  }else{
-                    echo "error in save customer <br/> " . $result->ERRO;
-                  }
+                if(is_null($result->getTeoremaCode()) or $result->getTeoremaCode() == "" ){
+                  echo 'erro ao enviar o cliente para o teorema';
                 }else{
-                  echo "<br/>error in Saving customer <br/>" ;
+                  echo "cleinte " . $result->getTeoremaCode() . " criado com sucesso.!";
                 }
-
+                die("<br/> Processo terminado ");
 
             }
 
@@ -193,21 +183,10 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
 
 
-    public function newAction() {
+    public function newActionProduct() {
 
 
 
-
-      //$collection =  Mage::getModel('teorema_integration/errors')->getCollection();
-      /*
-      $collection = Mage::getModel('teorema_integration/errors')->getCollection();
-
-
-      foreach ($collection as $key => $value) {
-        echo "<br/> valores ";
-      }
-
-      die("88888888");
 
       try{
 
@@ -230,16 +209,9 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
       }
 
 
-
-
-
-
       die("77777");
 
       //$this->testCategories();
-
-      */
-
 
 
       //test ok

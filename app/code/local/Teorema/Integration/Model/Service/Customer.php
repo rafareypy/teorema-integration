@@ -40,70 +40,99 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
   /*
     Função que cria um cliente Magento para o webService teorema (ecomClienteAltera)
   */
-  public function createCustomerToTeorema($customer = null){
+  public function createCustomerMagentoToTeorema($customer){
 
-      /*TODO refactor*/
+    /*TODO refactor
+      verificar melhhor forma de envio cliente, em caso de erro por que o mesmo ja existe ou atualizaçao etc
+    */
+
       $customerObj = $this->getCustomerMagentoToId( $customer->getId() );
 
-      $billingAddress  = $customerObj->getDefaultBillingAddress() ;
-
-      $number = $this->getParamAddress($billingAddress, 2) ;
-
-      $neighborhood = $this->getParamAddress($billingAddress, 3) ;
-
-      if(is_null($neighborhood) or $neighborhood == "" )
-        $neighborhood = "nd";
-
-      /*
-        TODO obter o 'tipo pessoa desde o objeto Customer'
-        verificar esquema com codigo do mounicipio
-        verificar usando o metodo getParamAddress obtendo todos os dados do endereco
-      */
-
-      $cliforfisicojuridico = $customerObj['tipopessoa'] > 232 ? "f" : "j";
-
-      #obter os endereços do magento para adicionar ao teorema
-      $params = array(
-              'METODO' => 'ecomClienteAltera',
-              'CLIFORCODIGO'	=> '',
-              'CLIFORFISICOJURIDICO' => $cliforfisicojuridico,
-              'CLIFORENDERECO' => $billingAddress['street'],
-              'CLIFORDOCUMENTO' => $customerObj['taxvat'],
-              'CLIFORBAIRRO' => $neighborhood, //$billingAddress['neighborhood'],
-              'EMPRESACODIGO' => $this->business_number,
-              'MUNICIPIOCODIGOIBGE' => 09401,
-              'CLIFORCEP' => $billingAddress['postcode'],
-              'CLIFORTELEFONE' => $billingAddress['telephone'],
-              'CLIFORENDERECONRO' => $number,
-              'CLIFORINSCRICAOESTADUALRG' => $customerObj['taxvat'],
-              'CLIFORNOME' => $customer->getData('firstname') . " " . $customer->getData('lastname'),
-              'CLIFOREMAIL' => $customer->getData('email'),
-              'USUARIO' => $this->user,
-              'SENHA'     => $this->password_md5,
-              'SENHA_REF' => $this->password,
-            );
+      if(!$customerObj or is_null($customerObj) ){
+        $this->saveErrosLog("Cliente Magento nulo para tentativa de envio w.s. teorema", '0', 'customer', '0', '0');
+        return $customerObj ;
+      }
 
 
-            $result = $this->connectionPost($params);
+      if(!is_null($customerObj->getTeoremaCode()) && $customerObj->getTeoremaCode() != "" ){
+        #em caso que o cliente ativou funcionalidade de atualizar cliente executa o meso..
+        if($this->update_customer){
 
-            $result = $result['data'];
+        }
+      }else{
 
-            die("Falta refatorar criação de clientes no w.s. teorema");
+        $params = $this->getParamsCreateCustomerTeoremaToMagento($customerObj);
 
-            #Obtemos o codigo do cliente desde teorema e adicionamos ao cliente Magento
-            if(isset($result->CODIGO)){
-              if($result->CODIGO == 0){
-                echo "<br/>Customer " . $result->FIELDS->CLIFORCODIGO . " saved " ;
+        $result = $this->connectionPost($params);
 
+        if($result['success'] && !empty($result['data'])){
+          $result = $result['data'] ;
 
-              }
+          if(isset($result->CODIGO)){
+            if($result->CODIGO == 0){
+              $customerObj->setTeoremaCode($result->FIELDS->CLIFORCODIGO);
+
+              $customerObj = $this->saveCustomer($customerObj);
             }
+          }
+        }else{
+          $message = "Erro ao tentar salvar um cliente Magento no w.s. Teorema " . $result['message'];
+          $this->saveErrosLog($message, '0', 'customer', '0', '0');
+        }
 
-            return $result ;
+      }
+
+      return $customerObj ;
 
   }
 
 
+  /*
+    Função que 'monta' array com parametros para que possa ser inserido no w.s. teorema
+  */
+  public function getParamsCreateCustomerTeoremaToMagento($customerObj)
+  {
+
+    $billingAddress  = $customerObj->getDefaultBillingAddress() ;
+
+    $number = $this->getParamAddress($billingAddress, 2) ;
+
+    $neighborhood = $this->getParamAddress($billingAddress, 3) ;
+
+    if(is_null($neighborhood) or $neighborhood == "" )
+      $neighborhood = "nd";
+
+    /*
+      TODO obter o 'tipo pessoa desde o objeto Customer'
+      verificar esquema com codigo do mounicipio
+      verificar usando o metodo getParamAddress obtendo todos os dados do endereco
+    */
+
+    $cliforfisicojuridico = $customerObj['tipopessoa'] > 232 ? "f" : "j";
+
+    #obter os endereços do magento para adicionar ao teorema
+    $params = array(
+            'METODO' => 'ecomClienteAltera',
+            'CLIFORCODIGO'	=> '',
+            'CLIFORFISICOJURIDICO' => $cliforfisicojuridico,
+            'CLIFORENDERECO' => $billingAddress['street'],
+            'CLIFORDOCUMENTO' => $customerObj['taxvat'],
+            'CLIFORBAIRRO' => $neighborhood, 
+            'EMPRESACODIGO' => $this->business_number,
+            'MUNICIPIOCODIGOIBGE' => 09401,
+            'CLIFORCEP' => $billingAddress['postcode'],
+            'CLIFORTELEFONE' => $billingAddress['telephone'],
+            'CLIFORENDERECONRO' => $number,
+            'CLIFORINSCRICAOESTADUALRG' => $customerObj['taxvat'],
+            'CLIFORNOME' => $customerObj->getData('firstname') . " " . $customerObj->getData('lastname'),
+            'CLIFOREMAIL' => $customerObj->getData('email'),
+            'USUARIO' => $this->user,
+            'SENHA'     => $this->password_md5,
+            'SENHA_REF' => $this->password,
+          );
+
+          return $params ;
+  }
 
   /**
 	 * Função que retorna Endereço, desde o objeto endereço e parametro,
@@ -152,16 +181,27 @@ class Teorema_Integration_Model_Service_Customer extends Teorema_Integration_Mod
 
 
   public function getCustomerMagentoToId($id = null){
-
     $customer = null ;
-
     if(!is_null($id)){
       $customer = Mage::getModel('customer/customer')->load($id);
     }
-
     return $customer ;
-
   }
+
+  public function saveCustomer($customer){
+
+    if(!is_null($customer)){
+      try{
+        $customer->save();
+      }catch(Exception $e){
+        $id = $customer->getId() ;
+        $message = "Erro ao tentar salvar cliente $id <br/>" . $e->getMessage() ;
+        $this->saveErrosLog($message, '0', 'customer', '0', '0');
+      }
+    }
+    return $customer ;
+  }
+
 
 
 }

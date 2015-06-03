@@ -21,6 +21,7 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
     protected $limit_load_products_sku;
     protected $limit_load_products;
     protected $init_value_changed_tables;
+    protected $update_customer ;
 
     /**
      *
@@ -46,6 +47,7 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
         $this->limit_load_products_sku = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products_sku");
         $this->limit_load_products = Mage::getStoreConfig("teorema/teorema_integration/limit_load_products");
         $this->init_value_changed_tables = Mage::getStoreConfig("teorema/teorema_integration/init_value_changed_tables");
+        $this->update_customer = Mage::getStoreConfig("teorema/teorema_integration/update_customer");
 
         if (is_null($this->limit_attempts))
             $this->limit_attempts = 3;
@@ -68,6 +70,9 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
 
         if (is_null($this->init_value_changed_tables))
             $this->init_value_changed_tables = 999999999;
+
+        if (is_null($this->update_customer))
+            $this->update_customer = false ;
 
     }
 
