@@ -78,6 +78,8 @@ class Teorema_Integration_Model_Indexer_Product extends Mage_Index_Model_Indexer
         $serviceProduct = Mage::getModel('teorema_integration/service_product');
 
         if($serviceProduct->getStatusModule()){
+
+
           $serviceProduct->updateProductsToTablesChanged(array('processing','pending'));
         }else{
           Mage::getSingleton('adminhtml/session')->addWarning('Modulo Teorema Integração esta desativado.!');

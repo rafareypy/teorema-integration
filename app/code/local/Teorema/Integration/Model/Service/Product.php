@@ -2,8 +2,11 @@
 class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Model_Service
 {
 
+  protected $serviceCategory ;
+
   function __construct(){
       parent::__construct();
+      $this->serviceCategory = Mage::getModel('teorema_integration/service_category');
   }
 
 
@@ -35,7 +38,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
   /**
 	 * Função que busca um determinado produto no Web Service Teorema
    * @param $sku = ITEMREDUZIDO
-	 * @return JSON product Model1Product
+	 * @return JSON product ecomItemConsulta
 	 */
   public function getProductJsonToTeorema($sku){
 
@@ -120,6 +123,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       echo "<br>\n Product  existis $sku \n<br/> ";
     }else{
         echo "<br/>\nCreating product\n<br/>";
+
         #Se o produto não existe, então sera buscado o Json do mesmo no webService da Teorema..
         $result = $this->getProductJsonToTeorema($sku);
 
@@ -149,7 +153,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 	 */
   public function getNewProductMagentoToJson($productJson, $productMagentoUpdate){
 
-    $category = array(1, 3);
+    $categoryArray = array(1, 2, 3);
 
     $productMagento = Mage::getModel('catalog/product');
 
@@ -208,9 +212,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     $productMagento->setStatus($status);
 
 
-    $productMagento->setCategoryIds($category);
-
-
     /*TODO verificar */
     $qty = 0;
     $availableBalance = Mage::getModel('teorema_integration/service_balance')
@@ -242,15 +243,13 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
           $productMagento->setVolumeAltura($productJson->ITEMMEDIDAESPESSURA);
     }
 
-
     if(isset($productJson->ITEMMEDIDALARGURA)){
         $productMagento->setVolumeLargura($productJson->ITEMMEDIDALARGURA);
     }
 
-
     if(isset($productJson->MARCA)){
 
-      echo "<br/>manufacturer is " . $productJson->MARCA . "<br/>";
+      echo "<br/>manufacturer is " . $productJson->MARCA->MARCADESCRICAO . "<br/>";
 
       $attibuteService = Mage::getModel('teorema_integration/service_attribute');
 
@@ -259,6 +258,23 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       $productMagento->setManufacturer($manufacturer);
 
     }
+
+    #verificar para hablitar falimia com categoria do Magetno..
+
+
+
+    #verificando se este produto tem a categoria familia.
+      if(isset($productJson->FAMILIA)){
+        if(isset($productJson->FAMILIA->FAMILIADESCRICAO)){
+            #buscamos a categoria com o mesmo nome da familia..
+            $description = $productJson->FAMILIA->FAMILIADESCRICAO ;
+            $categoryMagento = $this->serviceCategory->createCategory(null, $description, $description, true);
+            //var_dump($categoryMagento->getEntityId());
+            $categoryArray = array(1, 2,3, $categoryMagento->getEntityId());
+        }
+      }
+
+      $productMagento->setCategoryIds($categoryArray);
 
     return $productMagento ;
 
@@ -438,26 +454,26 @@ public function saveInitial($initial){
                echo "<br/> \n Indexer creating product  $sku";
                $product = $this->createProductMagento($sku);
              }else{
-               echo "<br/> \n Indexer updating product  $sku";
-               $product = $this->getProductOrCreateMagento($sku);
+                 echo "<br/> \n Indexer updating product  $sku";
+                 $product = $this->getProductOrCreateMagento($sku);
 
-               #produto existe, então sera buscado o Json do mesmo no webService da Teorema..
-               $result = $this->getProductJsonToTeorema($sku);
-               $productTeorema = null ;
-               if($result['success'] && !empty($result['data'])){
-                 $productTeorema = $result['data'] ;
+                 #produto existe, então sera buscado o Json do mesmo no webService da Teorema..
+                 $result = $this->getProductJsonToTeorema($sku);
+                 $productTeorema = null ;
+                 if($result['success'] && !empty($result['data'])){
+                   $productTeorema = $result['data'] ;
 
-                 #Obtendo um novo produto Magento com os valores atualizados do web service teorema
-                 $productUpdated   = $this->getNewProductMagentoToJson($productTeorema, $product);
+                   #Obtendo um novo produto Magento com os valores atualizados do web service teorema
+                   $productUpdated   = $this->getNewProductMagentoToJson($productTeorema, $product);
 
-                 $product  = $this->saveProduct($productUpdated);
-                 echo "<br/> \n Produto atualizado. <br/> \n";
-               }else{
-                  $product = null ;
-                  $message = !empty($result['message']) ? $result['message'] : "";
-                  Mage::getSingleton('core/session')->addError($message);
-                  $this->saveErrosLog("Error in update product (updateProductsToTablesChanged) " . $message , '0', 'product', $tableschanged->getLastIdUpdated(), $tableschanged->getId()) ;
-               }
+                   $product  = $this->saveProduct($productUpdated);
+                   echo "<br/> \n Produto atualizado. <br/> \n";
+                 }else{
+                    $product = null ;
+                    $message = !empty($result['message']) ? $result['message'] : "";
+                    Mage::getSingleton('core/session')->addError($message);
+                    $this->saveErrosLog("Error in update product (updateProductsToTablesChanged) " . $message , '0', 'product', $tableschanged->getLastIdUpdated(), $tableschanged->getId()) ;
+                 }
 
              }
 

@@ -19,7 +19,7 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
       $idMini = 1 ;
 
     if( is_null($idmax) )
-      $idmax = 30 ;
+      $idmax = 9999999999 ;
 
       $params = array(
       'USUARIO'   => $this->user,

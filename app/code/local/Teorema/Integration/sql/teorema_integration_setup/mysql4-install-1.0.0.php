@@ -33,7 +33,7 @@ CREATE TABLE `{$this->getTable('teorema_integration_tables_changed')}` (
     `code` int(10) unsigned NOT NULL default '0',
     `number_of_retries` int(3) unsigned NOT NULL default '0',
     `id_value` varchar (64) default NULL,
-    `type`  ENUM('stock', 'product', 'order', 'customer'),
+    `type`  ENUM('stock', 'product', 'order', 'customer', 'other', 'item_plan_price_movement', 'payment_condition', 'business', 'mark'),
     `created_at` DATETIME NOT NULL ,
     `updated_at` DATETIME NOT NULL ,
 	  PRIMARY KEY (`id`)
@@ -48,7 +48,7 @@ $sql=<<<SQLTEXT
 	  `tables_changed_id_teorema` int(11) unsigned NOT NULL,
     `id_tables_changed_magento` int(11) unsigned NOT NULL,
     `code` int(10) unsigned NOT NULL default '0',
-    `type`  ENUM('stock', 'product', 'order', 'customer', 'other'),
+    `type`  ENUM('stock', 'product', 'order', 'customer', 'other', 'item_plan_price_movement', 'payment_condition', 'business', 'mark'),
     `message` varchar (255) default NULL,
     `created_at` DATETIME NOT NULL ,
     `updated_at` DATETIME NOT NULL ,
@@ -56,7 +56,7 @@ $sql=<<<SQLTEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 SQLTEXT;
 $installer->run($sql);
-       
+
 /*Criando tabela teorema_integration_initial*/
 $sql=<<<SQLTEXT
 CREATE TABLE `{$this->getTable('teorema_integration_initial')}` (
@@ -114,7 +114,7 @@ $setup->startSetup();
 $category_entityTypeId     = $setup->getEntityTypeId('catalog_category');
 $category_attributeSetId   = $setup->getDefaultAttributeSetId($category_entityTypeId);
 $category_attributeGroupId = $setup->getDefaultAttributeGroupId($category_entityTypeId, $category_attributeSetId);
- 
+
 $setup->addAttribute('catalog_category', 'category_teorema',  array(
     'type'     => 'int',
     'label'    => 'Categoria da Teorema',
@@ -124,10 +124,10 @@ $setup->addAttribute('catalog_category', 'category_teorema',  array(
     'required'          => true,
     'user_defined'      => false,
     'default'           => 0,
-    'source' => 'eav/entity_attribute_source_boolean', 
+    'source' => 'eav/entity_attribute_source_boolean',
 ));
- 
- 
+
+
 $setup->addAttributeToGroup(
     $category_entityTypeId,
     $category_attributeSetId,
@@ -135,7 +135,7 @@ $setup->addAttributeToGroup(
     'category_teorema',
     '11'					//last Magento's attribute position in General tab is 10
 );
- 
+
 $attributeId = $setup->getAttributeId($category_entityTypeId, 'category_teorema');
 
 $setup->run("
@@ -150,14 +150,14 @@ Mage::getModel('catalog/category')
     ->setImportedCatId(0)
     ->setInitialSetupFlag(false)
     ->save();
- 
+
 //this will set data of your custom attribute for default category
 Mage::getModel('catalog/category')
     ->load(2)
     ->setImportedCatId(0)
     ->setInitialSetupFlag(false)
     ->save();
- 
+
 $setup->endSetup();
 
 $installer->endSetup();

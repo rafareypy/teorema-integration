@@ -80,7 +80,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     /*
       Testes relacionados a clientes
     */
-    public function newAction() {
+    public function newActionCustomer() {
 
       echo "testes relacionados a clientes <br/>";
 
@@ -158,6 +158,16 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       //die("--------------");
 
+      die("buscando ulltimo id de tabela alterda");
+
+      $modelService = Mage::getModel('teorema_integration/service_tableschangedteorema');
+
+
+      var_dump(json_encode($modelService->getTablesChanged()['data']));
+
+      die("testando tabelas modificadas");
+
+
       $tableschangedTeoremaService = Mage::getModel('teorema_integration/service_tableschangedteorema');
 
       $tableschangedTeoremaService->updateTablesChangedTeorema();
@@ -183,8 +193,20 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
 
 
-    public function newActionProduct() {
 
+
+
+    public function newAction() {
+
+      $modelService = Mage::getModel('teorema_integration/service_category');
+
+      $result = $modelService->createCategory(2, 'yes-teorema', 'yes-teorema', true );
+
+      var_dump($result);
+
+      die("processo terminado");
+
+      die("buscando determinado produto no w.s. teorema");
 
       $service = Mage::getModel('teorema_integration/service_product');
 
@@ -192,8 +214,18 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       $result = $service->getProductJsonToTeorema('006751');
 
+      $productJson = null ;
 
-      var_dump( json_encode($result['data']) );
+      if($result['success']){
+        $productJson =  $result['data'] ;
+      }
+
+
+
+
+      var_dump(json_encode($productJson->FAMILIA));
+
+      #Criar categoria com  nome da familia..
 
 
       die("testes relaionados a produto");
