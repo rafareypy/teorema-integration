@@ -9,8 +9,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       $this->serviceCategory = Mage::getModel('teorema_integration/service_category');
   }
 
-
-
 # kit, é um agrupamento de produtos sem atributo
 # agrupado é usando 1 atributo
 # e configurável é usando 1 ou mais atributos
@@ -152,19 +150,22 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 	 * @return product Magento
 	 */
   public function getNewProductMagentoToJson($productJson, $productMagentoUpdate){
-
-    $categoryArray = array(1, 2, 3);
+    /*refactor obter de forma dinamica o id da categoria default*/
+    $categoryArray = array(2);
 
     $productMagento = Mage::getModel('catalog/product');
 
-    if(!is_null($productMagentoUpdate) && !is_null($productMagentoUpdate->getId())  )
+    if(!is_null($productMagentoUpdate) && !is_null($productMagentoUpdate->getId())  ){
       $productMagento = $productMagentoUpdate ;
+      $categoryArray = $productMagento->getCategoryIds();
+    }
+
+      //$productMagento = Mage::getModel('catalog/product')->load(2);
+      //$categoryArray = $productMagento->getCategoryIds();
 
     #Falta:
     #verifica grupos e subgrupos 'possivelmente é a categoria no magento'
     #Verificar se esta ok categorias..
-
-
     $productMagento->setStoreIDs(array(1));
     $productMagento->setWebsiteIDs(array(1));
     $productMagento->setAttributeSetId(4);
@@ -259,25 +260,11 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
     }
 
-    #verificar para hablitar falimia com categoria do Magetno..
+    $categoryArray = $this->serviceCategory->getCategoriesByConfigurations($productMagento, $productJson, $categoryArray);
 
-
-
-    #verificando se este produto tem a categoria familia.
-      if(isset($productJson->FAMILIA)){
-        if(isset($productJson->FAMILIA->FAMILIADESCRICAO)){
-            #buscamos a categoria com o mesmo nome da familia..
-            $description = $productJson->FAMILIA->FAMILIADESCRICAO ;
-            $categoryMagento = $this->serviceCategory->createCategory(null, $description, $description, true);
-            //var_dump($categoryMagento->getEntityId());
-            $categoryArray = array(1, 2,3, $categoryMagento->getEntityId());
-        }
-      }
-
-      $productMagento->setCategoryIds($categoryArray);
+    $productMagento->setCategoryIds($categoryArray);
 
     return $productMagento ;
-
   }
 
 

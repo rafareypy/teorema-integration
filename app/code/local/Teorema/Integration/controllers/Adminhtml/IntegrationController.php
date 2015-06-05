@@ -149,7 +149,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
     }
 
     /*Testes relacionados ao tabelas alteradas*/
-    public function newActionTablesChanged(){
+    public function newAction(){
       //die("testing update stock");
 
        //$service_stock = Mage::getModel('teorema_integration/service_stock');
@@ -158,7 +158,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
       //die("--------------");
 
-      die("buscando ulltimo id de tabela alterda");
+
 
       $modelService = Mage::getModel('teorema_integration/service_tableschangedteorema');
 
@@ -196,7 +196,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
 
 
-    public function newAction() {
+    public function newActionCategory() {
 
       $modelService = Mage::getModel('teorema_integration/service_category');
 

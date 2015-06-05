@@ -16,10 +16,10 @@ class Teorema_Integration_Model_Service_Tableschangedteorema extends Teorema_Int
   public function getTablesChanged($idMini , $idmax , $value ){
 
     if( is_null($idMini) )
-      $idMini = 1 ;
+      $idMini = 6800 ;
 
     if( is_null($idmax) )
-      $idmax = 9999999999 ;
+      $idmax = 6900  ;
 
       $params = array(
       'USUARIO'   => $this->user,
