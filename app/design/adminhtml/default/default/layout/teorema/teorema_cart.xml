@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout>
+    <teorema_cart_adminhtml_cart_index>
+      <reference name="content">
+          <block type="teorema_cart/adminhtml_cart" name="cart" />
+      </reference>
+    </teorema_cart_adminhtml_cart_index>
+</layout>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <teorema_cart module="teorema_cart">
+            <title>Teorema Carrinhos abandonados</title>
+            <sort_order>100</sort_order>
+            <children>
+                <tabela>
+                    <title>Carrinhos Abandonados</title>
+                    <sort_order>10</sort_order>
+                    <action>teorema_cart/adminhtml_cart</action>
+                </tabela>
+                <tabelacolor>
+                    <title>Carrinhos Abandonados</title>
+                    <sort_order>20</sort_order>
+                    <action>teorema_cart/adminhtml_cart</action>
+                </tabelacolor>
+                <cart>
+                    <title>Carrinhos Abandonados</title>
+                    <sort_order>30</sort_order>
+                    <action>teorema_cart/adminhtml_cart</action>
+                </cart>
+            </children>
+        </teorema_cart>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <teorema_cart>
+                      <title>Teorema Cart</title>
+                      <sort_order>200</sort_order>
+                    </teorema_cart>
+                    <system>
+                      <children>
+                        <config>
+                          <children>
+                            <teorema>
+                              <title>Cart</title>
+                            </teorema>
+                          </children>
+                        </config>
+                      </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <layout>
+        <updates>
+            <teorema_cart>
+                <file>teorema/teorema_cart.xml</file>
+            </teorema_cart>
+        </updates>
+    </layout>
+</config>
