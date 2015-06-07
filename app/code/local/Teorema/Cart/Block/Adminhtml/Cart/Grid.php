@@ -11,22 +11,7 @@ class Teorema_Cart_Block_Adminhtml_Cart_Grid extends Mage_Adminhtml_Block_Widget
     }
 
     protected function _prepareCollection()
-    {
-        $p =  Mage::getModel('teorema_cart/cart');
-
-        $p->setCustomerId(1);
-        $p->setEmail("test");
-        $p->setStatus('active');
-        $p->setCartId(11);
-        $p->setNumberOfRetries(11);
-
-        try{
-            $p->save();
-            echo "<br/> Carrinho salvo com sucesso.! ";
-        }catch(Exception $e){
-            echo "<br/> Erro ao tentar salvar carrinho <br/>" . $e->getMessage();
-        }
-        
+    {        
         $collection =  Mage::getModel('teorema_cart/cart')->getCollection();
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -72,6 +57,14 @@ class Teorema_Cart_Block_Adminhtml_Cart_Grid extends Mage_Adminhtml_Block_Widget
             'align'     =>'left',
             'width'     => '50px',
             'index'     => 'cart_id',
+        ));
+
+
+        $this->addColumn('increment_id', array(
+            'header'    => 'order',
+            'align'     =>'left',
+            'width'     => '50px',
+            'index'     => 'increment_id',
         ));
 
 

@@ -41,11 +41,16 @@
             </teorema_cart_setup>
         </resources>
         <index>
-        		<indexer>
-            			<teorema_cart>
-                				<model>teorema_cart/indexer_cart</model>
-            			</teorema_cart>
-        		</indexer>
+            <indexer>
+                  <teorema_cart>
+                        <model>teorema_cart/indexer_cart</model>
+                  </teorema_cart>
+            </indexer>
+            <indexer>
+                  <teorema_cart_email>
+                        <model>teorema_cart/indexer_email</model>
+                  </teorema_cart_email>
+            </indexer>                        
     		</index>
         
         <!-- <events> 

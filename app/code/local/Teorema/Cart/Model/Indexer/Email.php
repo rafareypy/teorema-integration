@@ -1,5 +1,5 @@
 <?php
-class Teorema_Cart_Model_Indexer_Cart extends Mage_Index_Model_Indexer_Abstract
+class Teorema_Cart_Model_Indexer_Email extends Mage_Index_Model_Indexer_Abstract
 {
 
   const EVENT_MATCH_RESULT_KEY = 'teorema_cart';
@@ -15,6 +15,7 @@ class Teorema_Cart_Model_Indexer_Cart extends Mage_Index_Model_Indexer_Abstract
       )
   );
 
+
   /**
   * Nome do Indexer
   */
@@ -28,7 +29,7 @@ class Teorema_Cart_Model_Indexer_Cart extends Mage_Index_Model_Indexer_Abstract
   */
   public function getDescription()
   {
-      return 'Buscando carrinhos abandonados.!';
+      return 'envia e-mail para aviso de carrinhos abandonados';
   }
 
 
@@ -70,16 +71,17 @@ class Teorema_Cart_Model_Indexer_Cart extends Mage_Index_Model_Indexer_Abstract
       public function reindexAll()
       {
 
-        $this->serachingAbandonedCarts();
+        $this->sendEmail();
 
       }
 
 
-      public function serachingAbandonedCarts(){
+      public function sendEmail(){
         $serviceCart = Mage::getModel("teorema_cart/service_cart");
 
-        $serviceCart->searchAbandonedCarts();
         
+        $serviceCart->sendEmailToAbandonedCarts();
+
       }
 
 
