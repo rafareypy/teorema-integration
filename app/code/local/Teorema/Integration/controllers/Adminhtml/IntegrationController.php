@@ -150,6 +150,36 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     /*Testes relacionados ao tabelas alteradas*/
     public function newAction(){
+  /*    $rootCategoryId = Mage::app()->getStore("default")->getRootCategoryId() ;
+
+      $categorie = Mage::getModel('catalog/category')->load($rootCategoryId + 1);
+
+
+      var_dump($categorie);
+
+      die();
+*/
+/*
+      $categories = Mage::getModel('catalog/category')
+      					->getCollection()
+      					->addAttributeToSelect('*');
+
+                var_dump($categories);
+                die();
+
+    foreach ($categories as $key => $category) {
+
+
+
+      echo "<br/> Encontramos acategoria <br/>";
+      echo "Name  " . $category->getName() . "<br/>";
+      echo "Position " . $category->getPosition() . "<br/>";
+
+    }
+
+                die("buscando categorias");
+
+*/
       //die("testing update stock");
 
        //$service_stock = Mage::getModel('teorema_integration/service_stock');
@@ -159,6 +189,8 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
       //die("--------------");
 
 
+
+      
 
       $modelService = Mage::getModel('teorema_integration/service_tableschangedteorema');
 
@@ -191,9 +223,61 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
     }
 
+    public function newActionProduct(){
+      $service = Mage::getModel('teorema_integration/service_product');
+
+      $products = $service->getAllProductsToTeorema();
+
+
+      //$proudcts = $service->getProductJsonToTeorema("000002");
+
+      var_dump( $proudcts );
+      die();
 
 
 
+
+      ///var_dump($service->testConnection())
+      var_dump($products);
+      die();
+
+    	if($service->getStatusModule() ){
+        echo "<br/>init<br/>";
+    		$service->chargeSkusTeoremaToInitialModel();
+        echo "<br/>Carga inial completa<br/>";
+    	}else{
+    		echo "<br>\n Modulo Teorema Integracao esta desativado.!<br>\n";
+    	}
+    }
+
+    /*
+      Ação para testes relacionados ao produto
+    */
+    public function newActionProductACA(){
+
+      $service = Mage::getModel('teorema_integration/service_product');
+
+      $restult = $service->getProductJsonToTeorema('001345');
+
+      if(isset($restult['data']->ITEMSISTEMA)){
+        echo "<br/> Produto web servie <br/>";
+      }else{
+        echo "<br/> Produto teorema <br/>";
+      }
+
+      if($restult['data']->ITEMINATIVO == 'N' /*&& $preco < 0*/){
+        echo "<br/> Produto esta ativo<br/>";
+      }else{
+        echo "<br/> deso<br/>";
+      }
+      die();
+      var_dump($restult['data']);
+      die();
+
+      var_dump(json_encode($restult['data']));
+
+      die("testes relacionados ao produto");
+    }
 
 
     public function newActionCategory() {
@@ -236,7 +320,7 @@ class Teorema_Integration_Adminhtml_IntegrationController extends Mage_Adminhtml
 
         $errorsModel = Mage::getModel('teorema_integration/errors');
 
-        $errorsModel->setTablesChangedIdTeorema(1);
+        $errorsModel->setgedIdTeorema(1);
         $errorsModel->setCode('1');
         $errorsModel->setType('stock');
         $errorsModel->setMessage("asdfasdf");

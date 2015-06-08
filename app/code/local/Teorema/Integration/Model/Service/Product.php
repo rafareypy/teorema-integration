@@ -65,7 +65,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
       'SENHA_REF'   => $this->password,
       'SENHA'       => $this->password_md5,
       'EMPRESACODIGO' => '0001',
-      'ITEMSISTEMA' => 'T'
+      'ITEMSISTEMA' => 'W'
     );
 
     return $this->connectionGet($params);
@@ -184,7 +184,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
         $productMagento->setDescription(utf8_encode(utf8_decode($productJson->ITEMFICHATECNICA)));
     }
 
-
     $productMagento->setShortDescription(utf8_encode(utf8_decode($productJson->ITEMDESCRICAO)));
     $productMagento->setSku($productJson->ITEMREDUZIDO);
 
@@ -193,6 +192,7 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     if(isset($productJson->ITEMPESOLIQUIDO)){
       $weight = $productJson->ITEMPESOLIQUIDO;
     }
+
 
     $productMagento->setWeight($weight);
 
@@ -203,11 +203,17 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
 
     $productMagento->setPrice($price);
 
-    $status = 1;
-    if($productJson->ITEMINATIVO == 'N' && $preco < 0){
+
+    $status = 2;
+    if($productJson->ITEMINATIVO == 'N' && $price > 0)
       $status = 1;
+
+    if(isset($productJson->ITEMSISTEMA)){
+      if($productJson->ITEMSISTEMA != "W"){
+        $status = 2 ;
+      }
     }else{
-      $status = 2;
+      $status = 2 ;
     }
 
     $productMagento->setStatus($status);
@@ -221,7 +227,6 @@ class Teorema_Integration_Model_Service_Product extends Teorema_Integration_Mode
     if($availableBalance['success'] && !empty($availableBalance['data'])){
       $qty = $availableBalance['data']->ESTOQUEQUANTIDADEDISPONIVEL;
     }
-
 
     $is_in_stock = 0;
     if($qty > 0){
@@ -495,6 +500,7 @@ public function saveInitial($initial){
       try {
         $productMagento->save();
         $productReturn = $productMagento ;
+        echo "produto salvo" . $productReturn->getId();
       } catch (Exception $e) {
         $message = "\nError in save Product\n " . $e->getMessage();
         Mage::log($message, null, 'teorema_insert_error.log');
@@ -503,6 +509,7 @@ public function saveInitial($initial){
         $this->saveErrosLog($message , '0', 'product', 0, 0);
       }
     }
+
     return $productReturn ;
   }
 

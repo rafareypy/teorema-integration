@@ -62,6 +62,8 @@ $setup->endSetup();
 
 //Criando codigo tipo de categoria magento referenciando teorema
 
+
+//adicionado codigo de categoria no Magento referenciando o Teorema
 $setup = new Mage_Catalog_Model_Resource_Eav_Mysql4_Setup('core_setup');
 
 $setup->startSetup();
@@ -72,24 +74,23 @@ $category_attributeGroupId = $setup->getDefaultAttributeGroupId($category_entity
 
 $setup->addAttribute('catalog_category', 'type_teorema',  array(
     'type'     => 'text',
-    'label'    => 'Tipo Categoria teorema ',
-    'input'    => 'text',
+    'label'    => 'Typo Categoria Teorema ',
     'group'    => 'Global',
+    'input'    => 'select',
     'global'   => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_STORE,
     'visible'           => true,
     'required'          => false,
     'user_defined'      => false,
     'default'           => 0,
-    'source' => 'eav/entity_attribute_source_boolean',
+    'source' => 'teorema_integration/category_types',
 ));
-
 
 $setup->addAttributeToGroup(
     $category_entityTypeId,
     $category_attributeSetId,
     $category_attributeGroupId,
     'type_teorema',
-    '13'					//last Magento's attribute position in General tab is 10
+    '12'					//last Magento's attribute position in General tab is 10
 );
 
 $attributeId = $setup->getAttributeId($category_entityTypeId, 'type_teorema');
@@ -115,9 +116,6 @@ Mage::getModel('catalog/category')
     ->save();
 
 $setup->endSetup();
-
-
-
 
 
 

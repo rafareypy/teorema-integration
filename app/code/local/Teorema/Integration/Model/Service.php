@@ -221,6 +221,17 @@ abstract class Teorema_Integration_Model_Service extends Mage_Core_Model_Abstrac
         }
     }
 
+public function testConnection(){
+
+    $params = array(
+    'metodo' 	=> 'teste',
+     'mensagem' 	=> 'testeMs'
+    );
+
+    return $this->connectionGet($params);
+
+}
+
     public function testError() {
         $date = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
         $user = 'ECOMMERCE';

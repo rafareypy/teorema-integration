@@ -26,6 +26,7 @@ class Teorema_Integration_Model_Service_Category extends Teorema_Integration_Mod
 
     $category = null ;
 
+
     if($iDCategoryTeorema != null){
       $category = $this->getCategoryByCodeTeorema($iDCategoryTeorema) ;
     }
@@ -35,7 +36,8 @@ class Teorema_Integration_Model_Service_Category extends Teorema_Integration_Mod
 
     /* supply parent id */
     if(is_null($parentId))
-      $parentId = '2';
+      $parentId = $this->getIdCategoryDefault();
+      //'3';
 
     $category = new Mage_Catalog_Model_Category();
     $category->setName($name);
@@ -47,8 +49,6 @@ class Teorema_Integration_Model_Service_Category extends Teorema_Integration_Mod
     $category['category_teorema'] = $categoryTeorema ;
     $category['code_teorema'] = $iDCategoryTeorema ;
     $category['type_teorema'] = $typeTeorema ;
-
-
 
     $parentCategory = Mage::getModel('catalog/category')->load($parentId);
     $category->setPath($parentCategory->getPath());
@@ -68,6 +68,22 @@ class Teorema_Integration_Model_Service_Category extends Teorema_Integration_Mod
 
   }
 
+/**
+* Retorna o Id da categoria Default Magento
+* @return $idDefault categoria default Magento
+*/
+  public function getIdCategoryDefault(){
+
+    /*TODO refactor*/    
+    $idDefault = '3';
+
+    $rootCategoryId = Mage::app()->getStore("default")->getRootCategoryId() ;
+
+    if(isset($rootCategoryId) && $rootCategoryId > 0)
+      $idDefault = $rootCategoryId + 1  ;
+
+    return $idDefault ;
+  }
 
   public function getCategoryByName($name){
 

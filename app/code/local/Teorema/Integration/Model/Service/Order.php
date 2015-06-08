@@ -45,7 +45,7 @@ class Teorema_Integration_Model_Service_Order extends Teorema_Integration_Model_
         $paramsProducts[$i]['EMPRESAITEM'] = '0001';
         //$paramsProducts[$i]['TRANSACAO'] = ''; não é necesario
         $paramsProducts[$i]['VENDAVALORUNITARIO'] = $_product->getFinalPrice();
-        $paramsProducts[$i]['GRUPOFISCALCODIGO'] = '050';  //Verificar o que é?
+        $paramsProducts[$i]['GRUPOFISCALCODIGO'] = '005';  //Verificar o que é?
 
 
         $paramsProducts[$i]['VENDANUMEROLANCAMENTO'] = str_pad($i+1, 5, '0', STR_PAD_LEFT);
