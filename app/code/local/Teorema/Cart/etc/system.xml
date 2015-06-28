@@ -16,7 +16,7 @@
         <show_in_store>1</show_in_store>
         <groups>
               <teorema_cart translate="label" module="catalog">
-                  <label>Configurações de integração com Teorema</label>
+                  <label>Configurações de carrinhos abandonados Teorema</label>
                   <frontend_type>text</frontend_type>
                   <sort_order>1</sort_order>
                   <show_in_default>1</show_in_default>
@@ -27,145 +27,79 @@
                           <label>Habilitado</label>
                           <frontend_type>select</frontend_type>
                           <source_model>adminhtml/system_config_source_yesno</source_model>
-                          <sort_order>10</sort_order>
+                          <sort_order>1</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </active>
-                      <soap_url_wsdl translate="label">
-                          <label>soap url wsdl Teorema</label>
-                          <comment>Ex.: http://192.168.0.43:5539/send?wsdl</comment>
+
+
+                      <time_to_first translate="label">
+                          <label>Tempo para Primeiro envio carriho em horas:</label>
+                          <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
-                          <sort_order>20</sort_order>
+                          <sort_order>10</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
-                      </soap_url_wsdl>
-                      <soap_domain translate="label">
-                          <label>soap domain</label>
-                          <comment>Ex.: http://192.168.0.43</comment>
+                      </time_to_first>
+
+
+                      <time_to_second translate="label">
+                          <label>Tempo para Primeiro envio Segundo carriho em dias:</label>
+                          <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>30</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
-                      </soap_domain>
-                      <soap_port translate="label">
-                          <label>Porta</label>
-                          <comment>Ex.: 5539</comment>
+                      </time_to_second>
+
+
+
+                      <time_to_third translate="label">
+                          <label>Tempo para Primeiro envio  Terceiro carriho em dias:</label>
+                          <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>40</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
-                      </soap_port>
+                      </time_to_third>
 
-                      <user translate="label">
-                          <label>Usuario</label>
-                          <comment>Ex.: ECOMMERCE</comment>
+                      <promotion_code translate="label">
+                          <label>Codigo promocional para terceiro:</label>
+                          <comment>Ex.: 1</comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>60</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </promotion_code>
+
+
+
+                      <promotion_code_second translate="label">
+                          <label>Codigo promocional para Segundo carriho:</label>
+                          <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>50</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
-                      </user>
+                      </promotion_code_second>
 
-                      <password translate="label">
-                          <label>Senha</label>
-                          <comment>Ex.: eco3102</comment>
+
+
+                      <promotion_code_third translate="label">
+                          <label>Codigo promocional para terceiro:</label>
+                          <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
-                          <sort_order>70</sort_order>
+                          <sort_order>60</sort_order>
                           <show_in_default>1</show_in_default>
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
-                      </password>
-
-                      <cron_limit_search_webservice translate="label">
-                          <label>Limite de consultas ao WebService 'atualizar estoque'</label>
-                          <comment>Ex.:50 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>90</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </cron_limit_search_webservice>
-
-
-                      <cron_time translate="label">
-                          <label>Intervalo tempo em minutos para execução cron (tarefas)</label>
-                          <comment>Ex.:30 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>90</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </cron_time>
-
-
-                      <indexer_limit translate="label">
-                          <label>Quantidade limite para soncronização INTERNA estoque</label>
-                          <comment>Ex.:80 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>110</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </indexer_limit>
-
-
-                      <limit_attempts translate="label">
-                          <label>Quantidade limite para tentativas de atualização Tabelas Alteradas</label>
-                          <comment>Ex.:3 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>120</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </limit_attempts>
-
-
-                      <business_number translate="label">
-                          <label>Codigo de empresa:</label>
-                          <comment>Ex.:0001 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>130</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </business_number>
-
-
-                      <moving_company translate="label">
-                          <label>Empresa Movimento:</label>
-                          <comment>Ex.:0001 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>140</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </moving_company>
-
-
-                      <vendor_code translate="label">
-                          <label>VENDEDORCODIGO:</label>
-                          <comment>Ex.:00001 </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>150</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </vendor_code>
-
-
-                      <message_error_add_product_cart translate="label">
-                          <label>Mensagem quando a quantidade do produto não esta disponivel:</label>
-                          <comment>Ex.:Desculpe porem não temos esta quantidade do produto disponivel </comment>
-                          <frontend_type>text</frontend_type>
-                          <sort_order>150</sort_order>
-                          <show_in_default>1</show_in_default>
-                          <show_in_website>1</show_in_website>
-                          <show_in_store>1</show_in_store>
-                      </message_error_add_product_cart>
+                      </promotion_code_third>
 
 
                   </fields>

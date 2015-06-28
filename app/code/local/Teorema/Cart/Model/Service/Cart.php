@@ -29,8 +29,7 @@ class Teorema_Cart_Model_Service_Cart extends Teorema_Integration_Model_Service
 		
 		$key = array_search($order->getEntityId(), $teoremaCartsArray); 
 		
-		if(gettype($key) == 'boolean' && $key == false){
-			echo " <br/>não encontramos valores para " . $order->getEntityId();
+		if(gettype($key) == 'boolean' && $key == false){			
 			$teoremaCart = Mage::getModel("teorema_cart/cart");
 			$teoremaCart->setCustomerId($order->getCustomerId());
 			$teoremaCart->setEmail($order->getCustomerEmail());
@@ -39,10 +38,8 @@ class Teorema_Cart_Model_Service_Cart extends Teorema_Integration_Model_Service
 			$teoremaCart->setIncrementId($order->getIncrementId());		
 			$teoremaCart->setGrandTotal($order->getGrandTotal());
 			$teoremaCart->setProductsId($order->getIncrementId());
-
-
+			
 			$this->saveTeoremaCart($teoremaCart);
-
 		}
 
 	}
@@ -76,20 +73,23 @@ class Teorema_Cart_Model_Service_Cart extends Teorema_Integration_Model_Service
   public function sendEmailToAbandonedCarts(){
 
 
+
+
 	$teoremaCartCollection = Mage::getModel("teorema_cart/cart")->getCollection();
+
+
 
 	foreach ($teoremaCartCollection as $key => $cart) {		
 		
 		if($cart->getStatus() == 'active'){			
-
 
 			$order = $this->getOrder($cart->getCartId());
 			
 			if($order && !is_null($order)){
 
 				if($order->getStatus() == 'pending'){
-					$this->sendEmail($order);					
-					$cart->setNumberOfRetries(($cart->getNumberOfRetries() + 1));
+          $cart->setNumberOfRetries(($cart->getNumberOfRetries() + 1));
+					$this->sendEmail($order, $cart);										
 					if($cart->getNumberOfRetries() > 2)
 						$cart->setStatus('closed');	
 
@@ -122,8 +122,13 @@ class Teorema_Cart_Model_Service_Cart extends Teorema_Integration_Model_Service
 
   }
 
-  public function sendEmail($order){
+  public function sendEmail($order, $cart){
 
+    
+
+
+		$emailService = Mage::getModel("teorema_cart/service_email");
+		$emailService->sendEmail($order, $cart);
   }
 
 }
