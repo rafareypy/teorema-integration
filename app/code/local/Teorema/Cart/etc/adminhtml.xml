@@ -10,16 +10,6 @@
                     <sort_order>10</sort_order>
                     <action>teorema_cart/adminhtml_cart</action>
                 </tabela>
-                <tabelacolor>
-                    <title>Carrinhos Abandonados</title>
-                    <sort_order>20</sort_order>
-                    <action>teorema_cart/adminhtml_cart</action>
-                </tabelacolor>
-                <cart>
-                    <title>Carrinhos Abandonados</title>
-                    <sort_order>30</sort_order>
-                    <action>teorema_cart/adminhtml_cart</action>
-                </cart>
             </children>
         </teorema_cart>
     </menu>

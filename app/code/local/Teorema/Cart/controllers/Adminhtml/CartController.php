@@ -21,10 +21,7 @@ class Teorema_Cart_Adminhtml_CartController extends Mage_Adminhtml_Controller_Ac
     public function editAction()
     {
 
-        echo "edit Action to Teorema_Cart_Adminhtml_CartController";
-        die();
-
-        Mage::getSingleton('adminhtml/session')->addError('Esta tabela não existe');
+        Mage::getSingleton('adminhtml/session')->addError('Funcionalidade ainda não adicionada');
         $this->_redirect('*/*/');
 
     }
@@ -46,11 +43,6 @@ class Teorema_Cart_Adminhtml_CartController extends Mage_Adminhtml_Controller_Ac
 
 
     }
-
-
-
-
-
 
     public function deleteAction()
     {

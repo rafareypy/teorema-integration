@@ -62,11 +62,7 @@ class Teorema_Cart_Model_Indexer_Cart extends Mage_Index_Model_Indexer_Abstract
           Mage::log("matchEvent", null, "indexer.log");
       }
 
-      /**
-       * Ação que recebe quando o usuário clica em reindexar no painel do Magento
-       * neste caso ira atualizar todos os estoques dos produtos,
-       * que foram alteerados no registro de tabelas altedas do WebService Teorema
-       */
+      
       public function reindexAll()
       {
 
@@ -76,6 +72,7 @@ class Teorema_Cart_Model_Indexer_Cart extends Mage_Index_Model_Indexer_Abstract
 
 
       public function serachingAbandonedCarts(){
+        
         $serviceCart = Mage::getModel("teorema_cart/service_cart");
 
         $serviceCart->searchAbandonedCarts();

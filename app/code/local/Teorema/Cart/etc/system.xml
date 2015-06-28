@@ -68,7 +68,7 @@
                       </time_to_third>
 
                       <promotion_code translate="label">
-                          <label>Codigo promocional para terceiro:</label>
+                          <label>Codigo promocional para primeiro e-mail:</label>
                           <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>60</sort_order>
@@ -80,7 +80,7 @@
 
 
                       <promotion_code_second translate="label">
-                          <label>Codigo promocional para Segundo carriho:</label>
+                          <label>Codigo promocional para Segundo e-mail:</label>
                           <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>50</sort_order>
@@ -92,7 +92,7 @@
 
 
                       <promotion_code_third translate="label">
-                          <label>Codigo promocional para terceiro:</label>
+                          <label>Codigo promocional para terceiro e-mail:</label>
                           <comment>Ex.: 1</comment>
                           <frontend_type>text</frontend_type>
                           <sort_order>60</sort_order>
@@ -100,6 +100,38 @@
                           <show_in_website>1</show_in_website>
                           <show_in_store>1</show_in_store>
                       </promotion_code_third>
+
+
+
+                      <sender_email translate="label">
+                          <label>conta de que os e-mails serão emitidos:</label>
+                          <comment>Ex.: promocao@gmail.com</comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>70</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </sender_email>
+
+                      <sender_name translate="label">
+                          <label>Nome remetente:</label>
+                          <comment>Ex.: promocao loja-base</comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>80</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </sender_name>
+
+                      <template translate="label">
+                          <label>Id template e-mail</label>
+                          <comment>Ex.: 1</comment>
+                          <frontend_type>text</frontend_type>
+                          <sort_order>90</sort_order>
+                          <show_in_default>1</show_in_default>
+                          <show_in_website>1</show_in_website>
+                          <show_in_store>1</show_in_store>
+                      </template>
 
 
                   </fields>

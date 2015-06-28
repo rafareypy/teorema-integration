@@ -19,6 +19,9 @@ class Teorema_Cart_Block_Adminhtml_Cart_Grid extends Mage_Adminhtml_Block_Widget
 
     protected function _prepareColumns()
     {
+
+        $currency = (string) Mage::getStoreConfig(Mage_Directory_Model_Currency::XML_PATH_CURRENCY_BASE);
+
         $this->addColumn('id', array(
             'header'    => 'ID',
             'align'     =>'left',
@@ -51,20 +54,13 @@ class Teorema_Cart_Block_Adminhtml_Cart_Grid extends Mage_Adminhtml_Block_Widget
         ));
 
 
-
-        $this->addColumn('cart_id', array(
-            'header'    => 'cart_id',
+        $this->addColumn('grand_total', array(
+            'header'    => 'Total',
             'align'     =>'left',
             'width'     => '50px',
-            'index'     => 'cart_id',
-        ));
-
-
-        $this->addColumn('increment_id', array(
-            'header'    => 'order',
-            'align'     =>'left',
-            'width'     => '50px',
-            'index'     => 'increment_id',
+            'index'     => 'grand_total',
+            'type'          => 'currency',
+            'currency_code' => $currency            
         ));
 
 

@@ -1,11 +1,8 @@
 <?php
 class Teorema_Cart_Block_Adminhtml_Cart_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-	   public function __construct()
+    public function __construct()
     {
-
-      echo "Construct Teorema_Cart_Block_Adminhtml_Cart_Edit ";
-      die();
       
         parent::__construct();
 
